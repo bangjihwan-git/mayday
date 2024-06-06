@@ -1,0 +1,48 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<nav class="navbar navbar-default">
+<div class="container px-5">
+<div class="collapse navbar-collapse">
+	<ul class="dropdown-menu" role="menu">
+		<li class="nav-item"><a href="/faq/precedents/faqList">판례</a></li>
+		<li class="nav-item"><a href="/news/newsList">뉴스</a></li>
+		<li class="nav-item"><a href="/faq/counsel/faqList">상담</a></li>
+		<li class="nav-item"><a href="/faq/question/faqList">질문</a></li>
+		<li class="nav-item"><a href="/petition/petitionList">국민 청원</a> </li>
+	</ul>
+	<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+		<li class="nav-item"><a href="/board/notice/boardList">공지사항</a></li>
+		<li class="nav-item"><a href="/board/question/boardList">질문게시판</a></li>
+		<li class="nav-item"><a href="/board/free/boardList">자유게시판</a></li>
+	</ul>
+	<c:if test="${sessionScope.USER_INFO eq null }">
+		<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+			<li><a href="/login/login">로그인</a></li>
+			<li><a href="/signup/signup">회원가입</a></li>
+		</ul>
+	</c:if>
+	<c:if test="${sessionScope.USER_INFO ne null }">
+		 <li class="">
+              <a href="#" class="" data-toggle="" role="button" aria-expanded="false">${sessionScope.USER_INFO.userName } 님 <span class="caret"></span></a>
+              <ul class= role="">
+                <li><a href="<%=request.getContextPath() %>/info/info.wow">
+	                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+	                &nbsp;&nbsp;My page
+	                </a></li>
+                <li><a href="#">
+                	<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                	&nbsp;&nbsp;1:1 문의게시판
+                	</a></li>
+                <li class="divider"></li>
+                <li><a href="<%= request.getContextPath()%>/login/logout.wow">
+                	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                	&nbsp;&nbsp;로그아웃
+                	</a></li>
+              </ul>
+            </li>
+	</c:if>
+    
+    
+</div>
+</div>
+</nav>

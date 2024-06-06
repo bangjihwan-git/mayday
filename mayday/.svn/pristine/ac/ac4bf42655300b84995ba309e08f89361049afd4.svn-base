@@ -1,0 +1,59 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table border="1">
+<tr>
+<th>아이디</th><th>비밀번호</th><th>이름</th><th>생년원일</th><th>핸드폰</th><th>이메일</th><th>주소</th><th>멤버구분</th><th>상태</th>
+</tr>
+<c:forEach items="${memberList }" var="mem">
+<tr>
+<td id="memId">${mem.memId}</td>
+	<td>${mem.memPass}</td>
+	<td>${mem.memName}</td>
+	<td>${mem.memBir}</td>
+	<td>${mem.memPhone}</td>
+	<td>${mem.memMail}</td>
+	<td>${mem.memAdd1} ${mem.memAdd1}</td>
+	<td><select id="Posit" >
+    <option value="CLIENT" ${mem.memPosit eq "CLIENT " ? "selected='selected'" : ""}>CLIENT</option>
+    <option value="EXPERT" ${mem.memPosit eq "EXPERT " ? "selected='selected'" : ""}>EXPERT</option>
+	</select></td>
+	<td><select>
+    <option value="Y" ${mem.memCond eq "Y" ? "selected='selected'" : ""}>Y</option>
+    <option value="N" ${mem.memCond eq "N" ? "selected='selected'" : ""}>N</option>
+    <option value="H" ${mem.memCond eq "H" ? "selected='selected'" : ""}>H</option>
+	</select></td>
+	<c:choose>
+<c:when test="${mem.memPosit == 'EXPERT '}">
+	<td><a href="memberView?memId=${mem.memId}">이력보기</a></td>
+</c:when>
+<c:otherwise>
+<td></td>
+</c:otherwise>
+</c:choose>
+</tr>
+</c:forEach>
+</table>
+</body>
+<script type="text/javascript">
+$('#Posit').change(function(){
+	var tr = $(this).parent();
+	var td = tr.find('#memId').html;
+	alert(td);
+})
+	
+	
+	
+
+
+</script>
+</html>

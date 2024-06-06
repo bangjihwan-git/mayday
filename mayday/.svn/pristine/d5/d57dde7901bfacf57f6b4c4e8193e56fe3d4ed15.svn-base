@@ -1,0 +1,128 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp" %>
+<title>Insert title here</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+<div class="container">
+<div class="text-center">
+	<div class="panel panel-default">
+	<div class="panel-body">
+		<form name="search" class="col-xl-5 col-xxl-6 d-none d-xl-block text-center" action="/faq/${parentCd }/faqList" method="post">
+			<input type="hidden" name="curPage" value="${searchVO.curPage }">
+			<input type="hidden" name="rowSizePerPage" value="${searchVO.rowSizePerPage }">
+			<div class="">
+			<c:if test="${parentCd eq 'precedents' }">
+			<label id="id_searchCate"> 분류 </label>
+			<div>
+			<select id="id_searchCate" name="searchCate">
+				<option value="">--전체--</option>
+				<c:forEach items="${codeList }" var="code">
+				<option value="${code.codeCd }" ${faq.faqCd eq code.codeCd ? "selected='selected'":""  }>${code.codeName }</option>
+				</c:forEach>
+			</select>
+			</div>
+			</c:if>
+				<label id="id_searchType" class="col-sm-2 control-label">검색</label>
+				<div class="form-group">
+				<div class="col-sm-2">
+				<select id="id_searchType" name="searchType">
+					<option value="T" ${searchVO.searchType eq 'T' ? "selected='selected'":"" }>제목</option>
+					<option value="Q" ${searchVO.searchType eq 'Q' ? "selected='selected'":"" }>질문</option>
+					<option value="C" ${searchVO.searchType eq 'C' ? "selected='selected'":"" }>내용</option>
+				</select>
+				</div>
+				<div class="input-group mb-2">
+					<input class="form-control" type="text" name="searchWord" value="${searchVO.searchWord }" placeholder="검색어를 입력하세요" aria-describedby="input-searchWord" >
+					<button type="submit"  class="btn btn-outline-primary" id="input-searchWord"> <i class="fas fa-search fa-sm"></i> </button>
+				</div>
+				<div  class="col-sm-2 col-sm-offset-9 text-right">
+					<input type="radio" value="B" name="searchOrder" class="form-check-input"/></i>최신순
+					<input type="radio" value="H" name="searchOrder" class="form-check-input"/></i>조회순
+				</div>
+			</div>
+				</div>
+		</form>
+	</div>
+	</div>
+</div> 
+<div>
+ <a href="/faq/${parentCd}/faqForm"><span aria-hidden="true"></span> &nbsp;새글쓰기</a>
+</div>
+	<div>
+		전체 ${searchVO.totalRowCount }건 조회 
+		${searchVO.firstRow }
+		<select id="id_rowSizePerPage"	name="rowSizePerPage">
+			<c:forEach var="i" begin="10" end="50" step="10">
+				<option value="${i}"
+					${i eq searchVO.rowSizePerPage? "selected='selected'":"" }>${i }</option>
+			</c:forEach>
+		</select>
+	</div>
+	<div>
+<h3> FAQ - ${codeName.codeName}</h3>
+</div>
+<div>
+	<table border="1">
+	<thead>
+		<tr>
+			<th>글번호</th>
+			<th>구분</th>
+			<th>제목</th>
+			<th>아이디</th>
+			<th>조회수</th>
+		</tr>
+		<c:forEach items="${faqList}" var="faq" >
+			<tr>
+				<td>${faq.rowNo}</td>
+				<td>${faq.codeName}</td>
+				<td><a href="/faq/faqView?boNo=${faq.boNo}"> ${faq.boTitle}</a></td>
+				<td>${faq.memName}</td>
+				<td>${faq.boHit}</td>
+			</tr>
+		</c:forEach>
+	</thead>
+	</table>
+	<may:paging linkPage="/faq/${parentCd}/faqList" searchVO="${searchVO }"/>
+</div>
+	
+</div>
+</body>
+<script type="text/javascript">
+	var f = document.forms['search'];
+	console.log(f);
+	// paging ul class = pagination 각 페이징 번호 클릭
+	$('ul.pagination li a[data-page]').click(function (e) {
+		e.preventDefault();	// 기본 디폴트 막기 
+		f.curPage.value=$(this).data('page');
+		f.submit();
+	});
+	// 검색버튼 클릭시 
+	$(f).submit(function (e) {
+		e.preventDefault();
+		f.curPage.value =1;
+		f.submit();
+	});
+	
+	// 최신순, 조회순 오더바이
+	 $('input[type=radio]').click(function(e){
+		f.curPage.value =1;
+		f.searchOrder.value=this.value;
+		f.submit();
+	}); 
+	
+	// 페이징 목록 갯수 변경시 
+	$('#id_rowSizePerPage').change(function (e) {
+		f.curPage.value = 1;
+		f.rowSizePerPage.value = this.value;
+		f.submit();
+	});
+	
+	
+</script>
+</html>

@@ -1,0 +1,99 @@
+package com.mayday.member.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.member.vo.MemberSearchVO;
+import com.mayday.member.vo.MemberVO;
+@Service
+public class MemberServiceImpl implements IMemberService{
+	@Inject
+	private IMemberDao memberdao;
+	
+	@Override
+	public List<MemberVO> getMemberList(MemberSearchVO searchVO) {
+
+		int totalRowCount = memberdao.getCountMember(searchVO);
+		System.out.println("카운트"+totalRowCount);
+		searchVO.setTotalRowCount(totalRowCount);
+		searchVO.pageSetting();
+		return memberdao.getMemberList(searchVO);
+	}
+	
+	@Override
+	public List<MemberVO> getExpertList(MemberSearchVO searchVO) {
+		int totalRowCount = memberdao.getCountExpert(searchVO);
+		searchVO.setTotalRowCount(totalRowCount);
+		searchVO.pageSetting();
+		return memberdao.getExpertList(searchVO);
+	}
+	
+	@Override
+	public MemberVO getMember(String memId) throws BizNotFoundException {
+		MemberVO member = memberdao.getMember(memId);
+		if(member ==  null) throw new BizNotFoundException();
+		return member;
+	}
+// modify
+	// 관리자가 탈퇴여부,휴면여부 관리 
+	@Override
+	public void Modify(MemberVO member) throws BizNotFoundException, BizNotEffectedException {
+		MemberVO vo = memberdao.getMember(member.getMemId());
+		if(vo == null ) throw new BizNotFoundException();
+		int cnt = 	memberdao.updateMember(member);
+		if(cnt<1) throw new BizNotEffectedException();
+				
+	}
+	// 마이페이지에서 개인정보 수정
+	@Override
+	public void ModifyInfo(MemberVO member) throws BizNotFoundException, BizNotEffectedException {
+		MemberVO vo = memberdao.getMember(member.getMemId());
+		if(vo == null) throw new BizNotFoundException();
+		int cnt = memberdao.updateMemberInfo(member);
+		if(cnt<1) throw new BizNotEffectedException();
+	}
+	
+// regist
+	@Override
+	public void registMember(MemberVO member)throws BizNotEffectedException {
+		MemberVO vo = memberdao.getMember(member.getMemId());
+		int cnt = memberdao.insertMember(member);
+		if(cnt<1) throw new BizNotEffectedException();
+	}
+	@Override
+	public void registLawyer(MemberVO member)throws BizNotEffectedException {
+//		MemberVO vo = memberdao.getMember(member.getMemId());
+		int cnt = memberdao.insertLawyer(member);
+		if(cnt<1) throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void leaveMember(MemberVO member) throws BizNotFoundException, BizNotEffectedException {
+		MemberVO vo = memberdao.getMember(member.getMemId());
+		if(vo == null || (!vo.getMemPass().equals(member.getMemPass()))) {
+			System.out.println("not found exception");
+			throw new BizNotFoundException();
+		}
+		int cnt = memberdao.leaveMember(member);
+		if(cnt<1) throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void passCheck(MemberVO member) throws BizNotFoundException {
+		MemberVO findMember = memberdao.getMember(member.getMemId());
+		if(findMember == null) throw new BizNotFoundException();
+		if(!findMember.getMemPass().equals(member.getMemPass())) throw new BizNotFoundException();
+	}
+
+	@Override
+	public void changePassWord(MemberVO member) throws BizNotFoundException, BizNotEffectedException {
+		MemberVO findMember = memberdao.getMember(member.getMemId());
+		if(findMember == null) throw new BizNotFoundException();
+		int cnt = memberdao.changePassWord(member);
+	}
+}

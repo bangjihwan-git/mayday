@@ -1,0 +1,40 @@
+package com.mayday.payment.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.member.vo.MemberVO;
+
+@Controller
+public class PaymentController {
+	  
+    
+    @RequestMapping("/kakaoPay")
+    public String kakao(@ModelAttribute("pay")MemberVO pay) {
+    	System.out.println(pay);
+        return "payment/kakaoPay";
+    }
+
+    @RequestMapping("/successpayment")
+    public String successPayment() {
+        return "payment/successpayment";
+    }
+
+    @RequestMapping("/cancelpayment")
+    public String cancelPayment() {
+        return "payment/cancelpayment";
+    }
+
+    @RequestMapping("/failpayment")
+    public String failPayment() {
+        return "payment/failpayment";
+    }
+
+   
+    
+    
+    
+    
+    
+}

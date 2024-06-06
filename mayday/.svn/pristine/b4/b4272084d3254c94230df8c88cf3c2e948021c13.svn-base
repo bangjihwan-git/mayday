@@ -1,0 +1,16 @@
+<html>
+<head>
+<%@include file="/WEB-INF/inc/header.jsp" %>
+<title>Insert title here</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+<h1>
+	Hello world!  
+	Team Project!
+</h1>
+ <h1>	MAYDAY!</h1>
+<h1>${obj.userPass }</h1>
+<P>  The time on the server is ${serverTime}. </P>
+</body>
+</html>

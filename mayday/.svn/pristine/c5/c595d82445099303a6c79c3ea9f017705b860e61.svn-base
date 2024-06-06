@@ -1,0 +1,7 @@
+package com.mayday.login.service;
+
+import com.mayday.login.vo.UserVO;
+
+public interface ILoginService {
+	public UserVO login(String userId, String userPass);
+}

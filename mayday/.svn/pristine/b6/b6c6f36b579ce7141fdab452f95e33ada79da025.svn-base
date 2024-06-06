@@ -1,0 +1,100 @@
+package com.mayday.faq.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.faq.vo.FaqSearchVO;
+import com.mayday.faq.vo.FaqVO;
+
+@Service
+public class FaqServiceImpl implements IFaqService {
+	
+	@Inject
+	IFaqDao faqDao;
+	
+	@Override
+	public List<FaqVO> getFaqList(FaqSearchVO searchVO) throws BizNotFoundException {
+		int totalRowCount = faqDao.getCountFaq(searchVO);
+		searchVO.setTotalRowCount(totalRowCount);
+		searchVO.pageSetting();
+		return faqDao.getFaqList(searchVO);
+	}
+
+//	@Override
+//	public List<FaqVO> getFaqCounselList(FaqSearchVO searchVO) throws BizNotFoundException {
+//		int totalRowCount = faqDao.getPrecedentCountFaq(searchVO);
+//		searchVO.setTotalRowCount(totalRowCount);
+//		searchVO.pageSetting();
+//		return faqDao.getFaqCounselList(searchVO);
+//	}
+//
+//	@Override
+//	public List<FaqVO> getFaqQuestionList(FaqSearchVO searchVO) throws BizNotFoundException {
+//		int totalRowCount = faqDao.getPrecedentCountFaq(searchVO);
+//		searchVO.setTotalRowCount(totalRowCount);
+//		searchVO.pageSetting();
+//		return faqDao.getFaqQuestionList(searchVO);
+//	}
+	
+	@Override
+	public FaqVO getFaq(int boNo) throws BizNotFoundException {
+		FaqVO faq = faqDao.getFaq(boNo);
+		if(faq == null) {
+			throw new BizNotFoundException();
+		}
+		return null;
+	}
+	
+//	@Override
+//	public FaqVO getCounselFaq(int boNo) throws BizNotFoundException {
+//		FaqVO faq = faqDao.getCounselFaq(boNo);
+//		if(faq == null) {
+//			throw new BizNotFoundException();
+//		}
+//		return null;
+//	}
+//	
+//	@Override
+//	public FaqVO getQuestionFaq(int boNo) throws BizNotFoundException {
+//		FaqVO faq = faqDao.getQuestionFaq(boNo);
+//		if(faq == null) {
+//			throw new BizNotFoundException();
+//		}
+//		return null;
+//	}
+
+	@Override
+	public void increaseFaq(int boNo) throws BizNotEffectedException {
+		int cnt = faqDao.increaseHit(boNo);
+		if(cnt < 1) throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void modifyFaq(FaqVO faq) throws BizNotFoundException, BizNotEffectedException {
+		FaqVO vo = faqDao.getFaq(faq.getBoNo());
+		if(vo == null) throw new BizNotFoundException();
+		int cnt = faqDao.updateFaq(faq);
+		if(cnt < 1 ) throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void removeFaq(FaqVO faq) throws BizNotFoundException, BizNotEffectedException {
+		FaqVO vo = faqDao.getFaq(faq.getBoNo());
+		if(vo == null) throw new BizNotFoundException();
+		int cnt = faqDao.deleteFaq(faq);
+		if(cnt < 1 ) throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void registFaq(FaqVO faq) throws BizNotEffectedException {
+		int cnt = faqDao.insertFaq(faq);
+		if(cnt < 1) throw new BizNotEffectedException();
+		
+	}
+
+}

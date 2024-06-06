@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%request.setCharacterEncoding("utf-8");%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+</head>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+	<h3>결제하기</h3>
+	<div>이름을 입력해주세요</div>
+	<input id="memName"></input><br>
+	<select id="Item_name">
+		<option value="">--회원구분--</option>
+		<option value="Call">전화 상담</option>
+		<option value="Message">카카오톡 상담</option>
+		<option value="Meeting">방문 상담</option>
+	</select>
+	
+	<div id="quantity" style = "visibility:hidden">1</div>
+	
+	<div id="total_amount">30000원</div>
+	<div>*방문 상담을 선택하셨을 경우 추가 금액이 발생할 수 있습니다.*</div>
+	<button id="kakao">카카오페이로 결제하기</button>
+
+</body>
+<script type="text/javascript">
+	var params = {"ID" : $("#memName").val}
+	$("#kakao").click(function() {
+		$.ajax({
+			url : 'kakao',
+			dataType : 'json',
+			data : params,
+			success : function(data) {
+				alert("성공")
+				var box = data.next_redirect_pc_url;
+				window.open(box);
+			},
+			error : function(error) {
+				alert(error);
+			}
+
+		})
+
+	})
+</script>
+</html>

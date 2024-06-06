@@ -1,0 +1,35 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp" %>
+<title>FAQ</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+<div>
+	<table border="1">
+	<thead>
+		<tr>
+			<th>글번호</th>
+			<th>구분</th>
+			<th>제목</th>
+			<th>아이디</th>
+			<th>조회수</th>
+		</tr>
+		<c:forEach items="${faqList}" var="faq" varStatus="i" begin="1" step="1">
+			<tr>
+				<td>${faq.boNo}</td>
+				<td>${faq.codeName}</td>
+				<td>${faq.boTitle}</td>
+				<td>${faq.memId}</td>
+				<td>${faq.boHit}</td>
+			</tr>
+		</c:forEach>
+	</thead>
+	</table>
+</div>
+</body>
+</html>

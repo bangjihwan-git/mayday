@@ -1,0 +1,17 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import com.mayday.board.vo.BoardFreeVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.exception.BizPasswordNotMatchedException;
+
+public interface IBoardFreeService {
+	public BoardFreeVO getBoard(int boNo) throws BizNotFoundException;;
+	public List<BoardFreeVO> getBoardList();
+	public void increaseHit(int boNo) throws BizNotEffectedException;
+	public void remove(BoardFreeVO free) throws BizNotFoundException,BizPasswordNotMatchedException, BizNotEffectedException;
+	public void regist(BoardFreeVO free) throws BizNotEffectedException;
+	public void modify(BoardFreeVO free) throws BizNotFoundException,BizPasswordNotMatchedException, BizNotEffectedException ;
+}

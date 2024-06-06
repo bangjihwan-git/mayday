@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp" %>
+<title>${resultMessage.title }</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+<div>
+	<div>
+		<div>
+			<h3>${resultMessage.message }</h3>
+			<c:if test="${not empty resultMessage.url }">
+				<a href="<c:url value='${resultMessage.url}'/>">
+					<span aria-hidden="true" >&nbsp;${resultMessageVO.urlTitle}</span>
+				</a>
+			</c:if>
+		</div>
+	</div>
+</div>
+</body>
+</html>

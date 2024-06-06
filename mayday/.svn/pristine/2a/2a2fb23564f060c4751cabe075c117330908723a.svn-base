@@ -1,0 +1,47 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.board.vo.BoardFreeVO;
+
+@Service
+public class BoardFreeServiceImpl implements IBoardFreeService{
+
+	@Inject
+	IBoardFreeDao BoardFreeDao;
+
+	@Override
+	public BoardFreeVO getBoard(int boNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<BoardFreeVO> getBoardList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void remove(BoardFreeVO free) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void regist(BoardFreeVO free) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void modify(BoardFreeVO free) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

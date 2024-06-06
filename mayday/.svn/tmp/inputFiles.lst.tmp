@@ -1,0 +1,23 @@
+<<<<<<< .mine
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/board/service/BoardFreeServiceImpl.java
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/common/vo/PagingVO.java
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/board/web/BoardFreeController.java
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/main/HomeController.java
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/board/vo/BoardFreeVO.java
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/board/service/IBoardFreeDao.java
+/home/pc31/teamproj-work/workerProject/src/main/java/com/mayday/board/service/IBoardFreeService.java
+||||||| .r13
+=======
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/member/service/IMemberService.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/member/service/IMemberDao.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/board/vo/BoardFreeVO.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/board/service/IBoardFreeService.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/board/service/BoardFreeServiceImpl.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/board/web/BoardFreeController.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/main/HomeController.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/member/service/MemberVO.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/common/vo/PagingVO.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/member/web/MemberController.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/board/service/IBoardFreeDao.java
+/home/pc-52/proj/workerProject/src/main/java/com/mayday/member/service/MemberServiceImpl.java
+>>>>>>> .r20

@@ -1,0 +1,89 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+<table border="1">
+<tr>
+<th>아이디</th><th>비밀번호</th><th>이름</th><th>생년원일</th><th>핸드폰</th><th>이메일</th><th>주소</th><th>멤버구분</th><th>상태</th>
+</tr>
+<c:forEach items="${memberList }" var="mem">
+<tr>
+
+<td class="memId">${mem.memId}</td>
+	<td>${mem.memPass}</td>
+	<td>${mem.memName}</td>
+	<td>${mem.memBir}</td>
+	<td>${mem.memPhone}</td>
+	<td>${mem.memMail}</td>
+	<td>${mem.memAdd1} ${mem.memAdd1}</td>
+	<td><select class="Posit">
+    <option value="CLIENT" ${mem.memPosit eq "CLIENT " ? "selected='selected'" : ""} >CLIENT</option>
+    <option value="EXPERT" ${mem.memPosit eq "EXPERT " ? "selected='selected'" : ""}>EXPERT</option>
+	</select> </td>
+	<td><select class="Cond">
+    <option value="Y" ${mem.memCond eq "Y " ? "selected='selected'" : ""}>Y</option>
+    <option value="N" ${mem.memCond eq "N " ? "selected='selected'" : ""}>N</option>
+    <option value="H" ${mem.memCond eq "H " ? "selected='selected'" : ""}>H</option>
+	</select></td>
+	<c:choose>
+<c:when test="${mem.memPosit == 'EXPERT '}">
+	<td><a href="memberView?memId=${mem.memId}">이력보기</a></td>
+</c:when>
+<c:otherwise>
+<td></td>
+</c:otherwise>
+</c:choose>
+
+</tr>
+</c:forEach>
+</table>
+<may:paging linkPage="/faq/faqList" searchVO="${searchVO }"/>
+<form:form action="modify" method="post" modelAttribute="member" id="Modifysubmit">
+<input type="text" value="" name="memId" id="memIdsub" hidden="true">
+<input type="text" value="" name="memPosit" id="memPositsub" hidden="true">
+<input type="text" value="" name="memCond" id="memCondsub" hidden="true">
+</form:form>
+</body>
+<script type="text/javascript">
+$('.Posit').change(function(){
+	var check =confirm("수정하시겠습니까?");
+	if (check==true) {
+	var $tr = $(this).closest('tr');
+	var memId = $tr.find('.memId').html();
+	var memCond = $tr.find('.Cond').val();
+	$('#memIdsub').val(memId)
+	$('#memPositsub').val($(this).val())
+	$('#memCondsub').val(memCond)
+	$('#Modifysubmit').submit();		
+	}else {
+		location.reload();
+	}
+})
+$('.Cond').change(function(){
+	var check =confirm("수정하시겠습니까?");
+	if (check==true) {
+	var $tr = $(this).closest('tr');
+	var memId = $tr.find('.memId').html();
+	var memPosit = $tr.find('.Posit').val();
+	$('#memIdsub').val(memId)
+	$('#memPositsub').val(memPosit)
+	$('#memCondsub').val($(this).val())
+	$('#Modifysubmit').submit();
+	}else {
+		location.reload();
+	}
+})
+	
+	
+	
+
+
+</script>
+</html>

@@ -1,0 +1,13 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import com.mayday.board.vo.BoardFreeVO;
+
+public interface IBoardFreeService {
+	public BoardFreeVO getBoard(int boNo);
+	public List<BoardFreeVO> getBoardList();
+	public void remove(BoardFreeVO free);
+	public void regist(BoardFreeVO free);
+	public void modify(BoardFreeVO free);
+}

@@ -1,0 +1,106 @@
+package com.mayday.member.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mayday.board.service.IBoardService;
+import com.mayday.board.vo.BoardSerchVO;
+import com.mayday.board.vo.BoardVO;
+import com.mayday.common.vo.ResultMessageVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.login.vo.UserVO;
+import com.mayday.member.service.IMemberService;
+import com.mayday.member.vo.MemberVO;
+import com.mayday.reply.service.IReplyService;
+import com.mayday.reply.vo.ReplySearchVO;
+import com.mayday.reply.vo.ReplyVO;
+
+@Controller
+public class InfoController {
+	 @Inject
+	 IMemberService memberService;
+	 @Inject
+	 IBoardService boardService;
+	 @Inject
+	 IReplyService replyService;
+	 
+	 private Logger logger = LoggerFactory.getLogger(this.getClass());
+	 
+	 @RequestMapping("/info/mypage")
+	 public String userInfo(@ModelAttribute("boardSerchVO") BoardSerchVO boardSerchVO,
+			 					@ModelAttribute("replySearchVO") ReplySearchVO replySearchVO,
+			 					HttpServletRequest req,Model model) {
+		 HttpSession session = req.getSession();
+		 UserVO user = (UserVO)session.getAttribute("USER_INFO");
+		 if(user == null) {
+			 return "redirect:/login/login";
+		 }
+		 MemberVO member;
+		try {
+			member = memberService.getMember(user.getUserId());
+			model.addAttribute("member", member);
+		} catch (BizNotFoundException e) {
+			model.addAttribute("e", e);
+		}
+		// 내가 쓴 글 
+		boardSerchVO.setMemId(user.getUserId());
+		List<BoardVO> userBoardList = boardService.getUserBoardList(boardSerchVO);
+		model.addAttribute("userBoardList", userBoardList);
+		// 내가 쓴 덧글 
+		replySearchVO.setReMemId(user.getUserId());
+		List<ReplyVO> userReplyList = replyService.getUserReplyList(replySearchVO);
+		model.addAttribute("userReplyList", userReplyList);
+		
+		 return "info/mypage";
+	 }
+	 
+	 @RequestMapping("/info/mypageEdit")
+	 public String userInfoEdit(@RequestParam(value="memId", required = true) String memId, Model model) throws BizNotFoundException {
+		 logger.debug("memId={}", memId);
+		 MemberVO member = memberService.getMember(memId);
+		 model.addAttribute("member", member);
+		 return "info/mypageEdit";
+	 }
+	 
+	 @PostMapping("/info/mypageModify")
+	 public String userInfoModify(@ModelAttribute("member") MemberVO member, Model model) {
+		 logger.debug("member={}", member);
+		 ResultMessageVO resultMessage = new ResultMessageVO();
+		 try {
+			memberService.ModifyInfo(member);
+			resultMessage.setResult(true);
+			resultMessage.setMessage("수정되었습니다.");
+			resultMessage.setTitle("개인정보 수정");
+			resultMessage.setUrlTitle("돌아가기");
+			resultMessage.setUrl("info/mypage"); //redirect:/
+		} catch (BizNotFoundException e) {
+			resultMessage.setResult(false);
+			resultMessage.setMessage("수정 실패: 해당 아이디를 찾을 수 없습니다.");
+			resultMessage.setTitle("개인정보 수정");
+			resultMessage.setUrlTitle("돌아가기");
+			resultMessage.setUrl("info/mypage");
+		} catch (BizNotEffectedException e) {
+			resultMessage.setResult(false);
+			resultMessage.setMessage("수정 실패");
+			resultMessage.setTitle("개인정보 수정");
+			resultMessage.setUrlTitle("돌아가기");
+			resultMessage.setUrl("info/mypage");
+		}
+		 model.addAttribute("resultMessage", resultMessage);
+		 return "common/message";
+	 }
+}

@@ -1,0 +1,21 @@
+package com.mayday.news.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class NewsServiceImpl implements INewsService{
+
+	@Inject
+	INewsDao newsDao;
+	
+	@Override
+	public List<NewsVO> getNewsList() {
+		
+		return newsDao.getNewsList();
+	}
+
+}

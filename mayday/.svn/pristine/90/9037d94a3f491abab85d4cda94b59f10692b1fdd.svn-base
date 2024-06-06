@@ -1,0 +1,89 @@
+package com.mayday.common.web;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.RemoteEndpoint.Basic;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+
+@Controller
+@ServerEndpoint(value = "/chat/chatRoom")
+public class ChatController {
+	private static final List<Session> sessionList = new ArrayList<Session>();
+	private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+
+	public ChatController() {
+		System.out.println("웹소켓(서버) 객체 생성");
+	}
+
+	@OnOpen
+	public void onOpen(Session session) {
+		logger.info("Open session id:{} ", session.getId());
+		try {
+			final Basic basic = session.getBasicRemote();
+			basic.sendText("<div class='text-center'> " + session.getId() + " 채팅방에 입장하였습니다.</div>");
+		} catch (IOException e) {
+			logger.info("e={}", e);
+		}
+		sessionList.add(session);
+	}
+
+	/**
+	 * 모든 채팅방 사용자에게 메시지 전달
+	 * 
+	 * @param self
+	 * @param sender
+	 * @param message
+	 */
+	private void sendAllSessionToMessage(Session self, String sender, String message) {
+		try {
+			for (Session session : ChatController.sessionList) {
+				if (!self.getId().equals(session.getId())) {
+					session.getBasicRemote().sendText("<div class='mt-2 mb-2 anotherMsg '><span class='anotherName'>"+sender+"</span><span class='msg'>"+ message+"</span></div>");
+				}
+			}
+		} catch (IOException e) {
+			logger.debug("e={}", e);
+		}
+	}
+	/**
+	 * 내가 입력하는 메세지 
+	 * @param message
+	 * @param session
+	 * */
+	@OnMessage
+	public void onMessage(String message, Session session) {
+		String sender = message.split(",")[1];
+		String id = message.split(",")[2];
+		message = message.split(",")[0];
+		try {
+			final Basic basic = session.getBasicRemote();
+			logger.info("Message From " + sender + ": " + message);
+			basic.sendText("<div class='myMsg '><div class='msg text-center'>"+ message+"</div></div>");
+		} catch (IOException e) {
+			logger.info("e={}",e);
+		}
+		sendAllSessionToMessage(session, sender, message);
+	}
+	
+	@OnError
+	public void onError(Throwable e, Session session) {
+		
+	}
+	
+	@OnClose
+	public void onClose(Session session) {
+		logger.info("Session "+session.getId()+" has ended");
+		sessionList.remove(session);
+	}
+}

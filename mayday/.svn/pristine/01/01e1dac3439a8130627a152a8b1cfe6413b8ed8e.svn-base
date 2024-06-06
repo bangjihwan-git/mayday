@@ -1,0 +1,43 @@
+package com.mayday.faq.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.faq.service.IFaqService;
+import com.mayday.faq.vo.FaqSearchVO;
+import com.mayday.faq.vo.FaqVO;
+
+@Controller
+@RequestMapping("/faq")
+public class FaqController {
+	@Inject
+	IFaqService faqService;
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@RequestMapping("/{parentCd}/precedentList")
+	public String faqList(@ModelAttribute("searchVO") FaqSearchVO searchVO, Model model , @PathVariable("parentCd") String parentCd ) {
+		logger.debug("searchVO={}",searchVO);
+		if(parentCd.equals("P")) {searchVO.setFaqParentCd("FAQ10 ");}
+		else if(parentCd.equals("C")) {searchVO.setFaqParentCd("FAQ20 ");}
+		else if(parentCd.equals("Q")) {searchVO.setFaqParentCd("FAQ30 ");}
+		model.addAttribute("searchVO", searchVO);
+		try {
+			List<FaqVO> faqList = faqService.getFaqList(searchVO);
+			model.addAttribute("faqList", faqList);
+		} catch (BizNotFoundException e) {
+			model.addAttribute("e",e);
+		}
+		return "faq/precedentList";
+	}
+}

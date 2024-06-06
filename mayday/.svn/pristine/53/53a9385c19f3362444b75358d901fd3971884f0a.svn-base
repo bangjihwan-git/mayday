@@ -1,0 +1,72 @@
+package com.mayday.news.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.code.service.ICodeService;
+import com.mayday.code.vo.CodeVO;
+import com.mayday.common.vo.ResultMessageVO;
+import com.mayday.news.service.INewsService;
+import com.mayday.news.service.NewsVO;
+
+@Controller
+public class NewsController {
+	@Inject
+	INewsService newsService;
+	@Inject
+	ICodeService codeService;
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@ModelAttribute("codeList")
+	public List<CodeVO> cateList(){
+		List<CodeVO> codeList=codeService.getCodeList("NEW00 ");
+		return codeList;
+	}
+	@RequestMapping("news/newsList")
+	public String getList(Model model) {
+		logger.debug("newsList");
+		List<NewsVO> newsList=newsService.getNewsList();
+		model.addAttribute("newsList", newsList);
+	return"/news/newsList";
+	}
+	@RequestMapping("news/newsForm")
+	public String newsForm(@ModelAttribute("news")NewsVO news,Model model) {
+		logger.debug("newsForm");
+	return"/news/newsForm";
+	}
+	@RequestMapping("news/newsRegist")
+	public String getForm(@ModelAttribute("news")NewsVO news,Model model) {
+		logger.debug("newsRegist");
+		ResultMessageVO resultMessageVO = new ResultMessageVO();
+		newsService.createNews(news);
+		resultMessageVO.setMessage("등록이 완료되었습니다.");
+		resultMessageVO.setResult(true);
+		resultMessageVO.setTitle("등록");
+		resultMessageVO.setUrl("/news/newsList");
+		resultMessageVO.setUrlTitle("뉴스게시판");
+		model.addAttribute("resultMessage", resultMessageVO);
+	return"/common/message";
+	}
+	@RequestMapping("news/newsRemove")
+	public String newsRemove(@ModelAttribute("news")NewsVO news ,Model model) {
+		logger.debug("newsRemove");
+		newsService.removeNews(news);
+		ResultMessageVO resultMessageVO = new ResultMessageVO();
+		resultMessageVO.setMessage("삭제되었습니다.");
+		resultMessageVO.setResult(true);
+		resultMessageVO.setTitle("삭제");
+		resultMessageVO.setUrl("/news/newsList");
+		resultMessageVO.setUrlTitle("뉴스게시판");
+		model.addAttribute("resultMessage", resultMessageVO);
+	return"/common/message";
+	}
+	
+}

@@ -1,0 +1,73 @@
+package com.mayday.login.service;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.Manager;
+import org.springframework.stereotype.Service;
+
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.exception.BizPasswordNotMatchedException;
+import com.mayday.login.dao.ILoginDao;
+import com.mayday.login.vo.UserVO;
+import com.mayday.member.service.IMemberDao;
+import com.mayday.member.vo.MemberVO;
+
+@Service
+public class LoginServiceImpl implements ILoginService {
+
+	@Inject
+	IMemberDao memberDao;
+	@Inject
+	ILoginDao loginDao;
+
+	@Override
+	public UserVO login(String userId, String userPass) throws BizNotFoundException, BizPasswordNotMatchedException {
+
+		MemberVO member = memberDao.getMember(userId);
+		UserVO user = new UserVO();
+		if (member == null) {
+			throw new BizNotFoundException();
+		} else {					
+			if (member.getMemPass().equals(userPass)) {
+				loginDao.recentLogin(userId);
+				user.setUserId(userId);
+				user.setUserPass(userPass);
+				user.setUserName(member.getMemName());
+				user.setUserRole(memberDao.getMemRoleByUserId(member.getMemId()));
+				user.setUserCond(memberDao.checkCond(userId));
+				String cond = user.getUserCond();
+				if(cond.equals("H")||cond.equals("N")) {
+					user.setUserCond(cond);
+					throw new BizNotFoundException();
+				}
+				System.out.println(user);
+				return user;
+			} else {
+				throw new BizPasswordNotMatchedException();
+			}
+		}
+	}
+	
+	public String findMemberId(String memMail) throws BizNotFoundException{
+
+		String id = findMemberId(memMail);
+		if(id == null) {
+			throw new BizNotFoundException();
+		}
+			return id;
+
+	}
+
+	public String findMemberPw(String memMail) throws BizNotFoundException{
+		
+		return null;
+	}
+
+}
+
+
+

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mayday.reply.dao.IReplyDao">
+
+<select id="getReplyCount" parameterType="com.mayday.reply.vo.ReplySearchVO" resultType="int">
+select count(*) from reply where re_category = #{reCategory} and re_parent_no = #{reParentNo}
+</select>
+<select id="getReplyList" parameterType="com.mayday.reply.vo.ReplySearchVO" resultType="com.mayday.reply.vo.ReplyVO">
+<include refid="common.prePaging"/>
+SELECT re_no
+       , re_category
+       , re_parent_no
+       , re_mem_id
+       , re_content
+       , re_ip
+       , to_char(re_reg_date,'YYYY-MM-DD') as re_reg_date
+       , to_char(re_mod_date,'YYYY-MM-DD') as re_mod_date
+       	, (select mem_name from member where re_mem_id = mem_id) as re_mem_name
+FROM reply
+where re_parent_no = #{reParentNo}
+order by re_no desc
+<include refid="common.endPaging"/>
+</select>
+
+<select id="getUserReplyList" parameterType="com.mayday.reply.vo.ReplySearchVO" resultType="com.mayday.reply.vo.ReplyVO">
+<include refid="common.prePaging"/>
+SELECT re_no
+       , re_category
+       , re_parent_no
+       , re_mem_id
+       , re_content
+       , re_ip
+       , to_char(re_reg_date,'YYYY-MM-DD') as re_reg_date
+       , to_char(re_mod_date,'YYYY-MM-DD') as re_mod_date
+       , (select mem_name from member where re_mem_id = mem_id) as re_mem_name
+FROM reply
+where re_mem_id = #{reMemId}
+order by re_no desc
+<include refid="common.endPaging"/>
+</select>
+
+<select id="getReply" parameterType="int" resultType="com.mayday.reply.vo.ReplyVO">
+SELECT re_no
+       , re_category
+       , re_parent_no
+       , re_mem_id
+       , re_content
+       , re_ip
+       , to_char(re_reg_date,'YYYY-MM-DD') as re_reg_date
+       , to_char(re_mod_date,'YYYY-MM-DD') as re_mod_date
+FROM reply
+where re_no = #{reNo}
+</select>
+
+<update id="insertReply" parameterType="com.mayday.reply.vo.ReplyVO">
+INSERT INTO reply (
+    re_no
+    , re_category
+    , re_parent_no
+    , re_mem_id
+    , re_content
+    , re_ip
+    , re_reg_date
+    , re_mod_date
+) VALUES (
+    SEQ_REPLY.nextval
+    , #{reCategory}
+    , #{reParentNo}
+    , #{reMemId}
+    , #{reContent}
+    , #{reIp}
+    , to_char(SYSDATE,'YYYY-MM-DD')
+    , null
+)
+</update>
+
+<update id="updateReply" parameterType="com.mayday.reply.vo.ReplyVO">
+update reply set re_content = #{reContent}, re_mod_date = to_char(SYSDATE,'YYYY-MM-DD')
+where re_no = #{reNo}
+</update>
+
+<update id="deleteReply" parameterType="com.mayday.reply.vo.ReplyVO">
+delete from reply where re_no = #{reNo}
+</update>
+
+
+
+
+</mapper>
+
+
+
+
+
+
+

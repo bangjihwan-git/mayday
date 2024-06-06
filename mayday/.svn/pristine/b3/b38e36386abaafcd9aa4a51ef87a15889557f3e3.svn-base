@@ -1,0 +1,67 @@
+package com.mayday.faq.vo;
+
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+@SuppressWarnings("serial")
+public class FaqVO implements Serializable{
+
+	private int boNo;             /*글번호*/
+	private String faqCd;         /*구분코드*/
+	private String memId;         /*아이디*/
+	private String boTitle;       /*제목*/
+	private String boQue;         /*질문*/
+	private String boContent;     /*답변*/
+	private int boHit;            /*조회수*/
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+	
+	public int getBoNo() {
+		return boNo;
+	}
+	public void setBoNo(int boNo) {
+		this.boNo = boNo;
+	}
+	public String getFaqCd() {
+		return faqCd;
+	}
+	public void setFaqCd(String faqCd) {
+		this.faqCd = faqCd;
+	}
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+	public String getBoTitle() {
+		return boTitle;
+	}
+	public void setBoTitle(String boTitle) {
+		this.boTitle = boTitle;
+	}
+	public String getBoQue() {
+		return boQue;
+	}
+	public void setBoQue(String boQue) {
+		this.boQue = boQue;
+	}
+	public String getBoContent() {
+		return boContent;
+	}
+	public void setBoContent(String boContent) {
+		this.boContent = boContent;
+	}
+	public int getBoHit() {
+		return boHit;
+	}
+	public void setBoHit(int boHit) {
+		this.boHit = boHit;
+	}
+	
+}

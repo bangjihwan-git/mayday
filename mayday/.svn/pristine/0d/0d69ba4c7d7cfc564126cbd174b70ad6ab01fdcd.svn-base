@@ -1,0 +1,44 @@
+package com.mayday.login.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.exception.BizPasswordNotMatchedException;
+import com.mayday.login.dao.ILoginDao;
+import com.mayday.login.vo.UserVO;
+import com.mayday.member.service.IMemberDao;
+import com.mayday.member.service.MemberVO;
+
+@Service
+public class LoginServiceImpl implements ILoginService {
+
+	@Inject
+	IMemberDao memberDao;
+	@Inject
+	ILoginDao loginDao;
+
+	@Override
+	public UserVO login(String userId, String userPass) throws BizNotFoundException, BizPasswordNotMatchedException {
+
+		MemberVO member = memberDao.getMember(userId);
+		UserVO user = new UserVO();
+		if (member == null) {
+			throw new BizNotFoundException();
+		} else {
+			if (member.getMemPass().equals(userPass)) {
+				loginDao.recentLogin(userId);
+				user.setUserId(userId);
+				user.setUserPass(userPass);
+				user.setUserName(member.getMemName());
+				user.setUserRole(memberDao.getMemRoleByUserId(member.getMemId()));
+				System.out.println(user);
+				return user;
+			} else {
+				throw new BizPasswordNotMatchedException();
+			}
+		}
+	}
+
+}

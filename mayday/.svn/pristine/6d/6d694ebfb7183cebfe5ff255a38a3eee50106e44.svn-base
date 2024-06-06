@@ -1,0 +1,18 @@
+package com.mayday.common.service;
+
+import java.util.List;
+
+import com.mayday.common.vo.ChatMessageVO;
+import com.mayday.common.vo.ChatRoomVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+
+public interface IChatService {
+	public List<ChatRoomVO> getChatRoomList(String userId);
+	public List<ChatMessageVO> getChatMessageList(String roomId);
+	public ChatRoomVO getChatRoomById(String roomId);
+	public void registChatRoom(ChatRoomVO chatRoom) throws BizNotEffectedException;
+	public void insertChatMessage(ChatMessageVO chatMessage)throws BizNotEffectedException;
+	public void removeChatRoom(String roomId)throws BizNotFoundException,BizNotEffectedException;
+	public void removeChatMessage(String roomId)throws BizNotFoundException,BizNotEffectedException;
+}

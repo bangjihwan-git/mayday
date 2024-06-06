@@ -1,0 +1,21 @@
+package com.mayday.payment.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.payment.dao.IPaymentDao;
+import com.mayday.payment.vo.PaymentVO;
+@Service
+public class PaymentService implements IPaymentService{
+	@Inject
+	IPaymentDao paymentdao;
+	@Override
+	public void registPayment(PaymentVO payment) throws BizNotEffectedException {
+		int cnt = paymentdao.insertPayment(payment);
+		if(cnt<1) throw new BizNotEffectedException();
+		
+	}
+
+}

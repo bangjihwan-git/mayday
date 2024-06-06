@@ -1,0 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<nav>
+	<ul>
+		<li><a href="/faq/precedents/faqList">판례</a></li>
+		<li><a href="/faq/counsel/faqList">상담</a></li>
+		<li><a href="/faq/question/faqList">질문</a></li>
+	</ul>
+	<ul>
+		<li><a href="/board/notice/boardList">공지사항</a></li>
+		<li><a href="/faq/question/boardList">질문게시판</a></li>
+		<li><a href="/faq/free/boardList">자유게시판</a></li>
+	</ul>
+</nav>

@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<%@ include file="/WEB-INF/inc/top.jsp"%>
+	<form:form action="newsRegist" method="post" modelAttribute="news">
+		<table>
+			<tr>
+				<th>구분</th>
+				<td>
+					<form:select path="boCd">
+						<form:option value="">-- 선택하세요--</form:option>
+						<form:options items="${codeList}" itemLabel="codeName"
+							itemValue="codeCd" />
+					</form:select></td>
+			</tr>
+			<tr>
+				<th>기사제목</th>
+				<td><form:input path="newsTitle" /></td>
+			</tr>
+			<tr>
+				<th>얼론사</th>
+				<td><form:input path="newsPress" /></td>
+			</tr>
+			<tr>
+				<th>링크</th>
+				<td><form:input path="newsLink" /></td>
+			</tr>
+			<tr>
+			
+							<td>
+							<a href="newsList">목록</a>
+							</td>
+							<td>			
+							<button type="submit">저장</button>
+							</td>
+							</tr>
+		</table>
+	</form:form>
+</body>
+</html>

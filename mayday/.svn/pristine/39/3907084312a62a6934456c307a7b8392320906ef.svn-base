@@ -1,0 +1,5 @@
+package com.mayday.payment.web;
+
+public class PaymentController {
+
+}

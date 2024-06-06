@@ -1,0 +1,18 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import com.mayday.board.vo.BoardVO;
+import com.mayday.board.vo.BoardSerchVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+
+public interface IBoardService {
+
+	public List<BoardVO> getBoardList(BoardSerchVO searchVO) throws BizNotFoundException;
+	public BoardVO getboard(int boNo) throws BizNotFoundException;
+	public void increaseboard(int boNo) throws BizNotEffectedException;
+	public void modifyboard(BoardVO board) throws BizNotFoundException,BizNotEffectedException;
+	public void removeboard(BoardVO board) throws BizNotFoundException,BizNotEffectedException;
+	public void registboard(BoardVO board) throws BizNotEffectedException;
+}

@@ -1,0 +1,9 @@
+package com.mayday.petition.service;
+
+import java.util.List;
+
+import com.mayday.petition.vo.PetitionVO;
+
+public interface IPetitionDao {
+	public List<PetitionVO> getPetitionList();
+}

@@ -1,0 +1,90 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%request.setCharacterEncoding("utf-8");%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+</head>
+<body>
+	<%@ include file="/WEB-INF/inc/top.jsp"%>
+
+	<h3>결제하기</h3>
+	<input id="lawyerId" name="lawyerId" type="hidden"></input>
+	<br>
+	<input id="memId" name="memId" placeholder="아이디를 입력해주세요."></input>
+	<br>
+	<input id="memName" name="memName" placeholder="이름을 입력해주세요."></input>
+	<br>
+	<input id="memPhone" name="memPhone" placeholder="전화번호를 입력해주세요."></input>
+	<br>
+	<select id="item_name" name="item_name">
+		<option value="">--상담내용--</option>
+		<option value="Call">전화 상담</option>
+		<option value="Message">카카오톡 상담</option>
+		<option value="Meeting">방문 상담</option>
+	</select>
+	<br>
+	<input id="quantity" placeholder="이용 시간을 입력해주세요(단위: 분)"></input>
+	<button id="check">확인</button>
+	<br>
+
+	<input id="total_amount"></input>원
+	<br>
+	<div>*방문 상담을 선택하셨을 경우 추가 금액이 발생할 수 있습니다.*</div>
+	<br>
+	<button id="kakao" type="submit">카카오페이로 결제하기</button>
+
+</body>
+<script type="text/javascript">
+	$(document).ready(
+			function() {
+				var box = data.next_redirect_pc_url;
+				var web = window.open(box);
+				var lawyerId = location.href.substr(location.href
+						.lastIndexOf('=') + 1);
+				document.getElementById("lawyerId").value = lawyerId;
+				$("#kakao").click(function() {
+					var params = {
+						"ID" : $("#memId").val(),
+						"quantity" : $("#quantity").val(),
+						"Item_name" : $("item_name").val,
+						"total_amount" : $("#total_amount").val(),
+						"lawyerId" : lawyerId
+					};
+					console.log("ID : " + $("#memId").val());
+					console.log("quantity : " + $("#quantity").val());
+					console.log("item_name : " + $("#item_name").val());
+					console.log("total_amount : " + $("#total_amount").val());
+					console.log('lawyerId : ' + lawyerId);
+					var openWeb = null;
+					$.ajax({
+						url : 'kakao',
+						dataType : 'json',
+						data : params,
+						success : function(data) {
+							alert("성공");
+							web;
+							console.log(openWeb);
+						},
+						error : function(error) {
+							alert(error);
+						},
+						complete{
+							if(web.close()){
+								location.href='/successpayment';
+							}
+						}
+					})
+
+				})
+			});
+
+	$("#check").click(function() {
+		$("#total_amount").val(1000 * $("#quantity").val());
+	})
+</script>
+</html>

@@ -1,0 +1,74 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+.martop{
+margin-top: 20%
+}
+body{
+background-color: #FDF4EA
+}
+         
+</style>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+
+
+<section class="py-5">
+                <div class="container px-5 my-5 justify-content-left">
+                    <div class="row gx-5">
+                        <div class="col-lg-8 col-xl-6">
+                            <div class="text-left">
+                                <h2 class="fw-bolder">변호사 상세보기 및 이력 </h2><br><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-5" >                  
+                       <div class="col-lg-4 mb-5">
+                            <div class="card h-100 shadow border-0">
+                                <a class="hov" href="#" style="z-index: 2;"><img class="card-img-top" src="data:image/jpeg;base64,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" alt="..." /></a>
+                                <div class="card-body p-4">
+                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">변호사</div>
+                                   <h5 class="card-title mb-3">${expert.memName}</h5>
+                                 
+                                    <hr>
+                                    <pre class="maydayscrollbar">
+                                    
+아이디  	${expert.memId}
+생년월일  ${expert.memBir}
+휴대폰 	${expert.memPhone}
+이메일 	${expert.memMail}
+주소 	${expert.memAdd1} ${expert.memAdd2}
+
+
+                                    </pre>
+                                   
+                                </div>
+                               
+                            </div>                   
+                    </div>
+                    
+                       <div class="col-lg-8 mb-5" style="padding-left: 50px;padding-right: 0px;">
+                            <div class="card h-100 shadow border-0">
+                            <div class="text-decoration-none link-dark"><h5 class="card-title mb-3 text-center"><i class="fas fa-info-circle">변호사이력</i></h5></div>
+                            <div class="maydayscrollbar" style="height: 500px" >
+                            <br>&nbsp;&nbsp;&nbsp;${expert.memCareer}                 
+                            
+                          </div>
+                            </div>
+                            
+                    </div>
+                    </div>
+                    
+                    </div>
+                    </section>
+
+</body>
+</html>

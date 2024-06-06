@@ -1,0 +1,24 @@
+package com.mayday.member.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.member.service.IMemberService;
+import com.mayday.member.service.MemberVO;
+
+public class MemberController{
+@Inject
+IMemberService memberService;
+
+@RequestMapping()
+public String memberList(Model model) {
+	List<MemberVO> memberList= memberService.getMemberList();
+	model.addAttribute("memberList", memberList);
+	return "";
+}
+	
+}

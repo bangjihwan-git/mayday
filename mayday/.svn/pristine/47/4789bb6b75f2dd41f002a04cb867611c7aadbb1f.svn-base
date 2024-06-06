@@ -1,0 +1,5 @@
+package com.mayday.signup.valid;
+
+public interface LaywerSignup2 {
+
+}

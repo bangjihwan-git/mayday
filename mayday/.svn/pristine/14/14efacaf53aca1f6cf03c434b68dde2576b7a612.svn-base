@@ -1,0 +1,25 @@
+package com.mayday.news.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.news.service.INewsService;
+import com.mayday.news.service.NewsVO;
+
+@Controller
+public class NewsController {
+	@Inject
+	INewsService newsService;
+	
+	@RequestMapping("news/newsList")
+	public String getList(Model model) {
+		List<NewsVO> newsList=newsService.getNewsList();
+		model.addAttribute("newsList", newsList);
+	return"/news/newsList";
+	}
+}

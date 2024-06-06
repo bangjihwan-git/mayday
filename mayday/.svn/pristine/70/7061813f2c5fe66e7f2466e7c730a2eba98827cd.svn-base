@@ -1,0 +1,70 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.board.vo.BoardSerchVO;
+import com.mayday.board.vo.BoardVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.faq.vo.FaqVO;
+
+@Service
+public class BoardServiceImpl implements IBoardService {
+
+	@Inject
+	IBoardDao boarddao;
+
+	@Override
+	public List<BoardVO> getBoardList(BoardSerchVO searchVO) {
+		int totalRowCount = boarddao.getCountBoard(searchVO);
+		searchVO.setTotalRowCount(totalRowCount);
+		searchVO.pageSetting();
+		return boarddao.getboardList(searchVO);
+	}
+
+	@Override
+	public BoardVO getboard(int boNo) throws BizNotFoundException {
+		BoardVO board = boarddao.getboard(boNo);
+		if (board == null) {
+			throw new BizNotFoundException();
+		}
+		return board;
+	}
+
+	@Override
+	public void increaseboard(int boNo) throws BizNotEffectedException {
+		int cnt = boarddao.increaseHit(boNo);
+		if (cnt < 1)
+			throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void modifyboard(BoardVO board) throws BizNotFoundException, BizNotEffectedException {
+		int cnt = boarddao.updateBoard(board);
+		if (cnt < 1)
+			throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void removeboard(BoardVO board) throws BizNotFoundException, BizNotEffectedException {
+		BoardVO vo = boarddao.getboard(board.getBoNo());
+		if (vo == null)
+			throw new BizNotFoundException();
+		int cnt = boarddao.deleteBoard(board);
+		if (cnt < 1)
+			throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void registboard(BoardVO board) throws BizNotEffectedException {
+		int cnt = boarddao.insertBoard(board);
+		if (cnt < 1)
+			throw new BizNotEffectedException();
+
+	}
+
+}

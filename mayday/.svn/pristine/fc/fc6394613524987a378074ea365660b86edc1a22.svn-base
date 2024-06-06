@@ -1,0 +1,67 @@
+package com.mayday.board.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.board.service.IBoardService;
+import com.mayday.board.vo.BoardSerchVO;
+import com.mayday.board.vo.BoardVO;
+import com.mayday.exception.BizNotFoundException;
+
+
+@Controller
+@RequestMapping("/board")
+public class BoardController {
+
+	@Inject
+	IBoardService boardservice;
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@RequestMapping("/{parentCd}/boardList")
+	public String boardList(@ModelAttribute("searchVO") BoardSerchVO searchvo, Model model,
+			@PathVariable("parentCd") String parentCd) {
+		logger.debug("searchVO={}", searchvo);
+		if (parentCd.equals("notice")) {
+			searchvo.setBoardParentCd("BOD30 ");
+		} else if (parentCd.equals("question")) {
+			searchvo.setBoardParentCd("BOD10 ");
+		} else if (parentCd.equals("free")) {
+			searchvo.setBoardParentCd("BOD20 ");
+		}
+		model.addAttribute("searchVO", searchvo);
+		try {
+			List<BoardVO> boardList = boardservice.getBoardList(searchvo);
+			model.addAttribute("boardList", boardList);
+		} catch (BizNotFoundException e) {
+			model.addAttribute("e", e);
+		}
+		return "board/boardList";
+	}
+
+	public String boardView() {
+		return "";
+	}
+
+	public String boardForm() {
+		return "";
+	}
+
+	public String boardEdit() {
+		return "";
+	}
+
+	public String boardDelete() {
+		return "";
+	}
+
+}

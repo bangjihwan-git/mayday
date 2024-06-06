@@ -1,0 +1,91 @@
+package com.mayday.member.service;
+
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+@SuppressWarnings("serial")
+public class MemberVO implements Serializable {
+	private String memId;              /* 아이디*/
+	private String memPass;            /* 비밀번호*/
+	private String memName;            /* 이름*/
+	private String memBir;             /* 생년월일*/
+	private String memPhone;           /* 핸드폰*/
+	private String memMail;            /* 이메일*/
+	private String memAdd1;            /* 주소*/
+	private String memAdd2;            /* 상세주소*/
+	private String memCareer;          /* 이력*/
+	private String memPosit;           /* 멤버 구분 */
+	private String memCond;            /* 상태(Y : 활동, N : 탈퇴, H : 휴면,승인대기)*/
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}		
+	public String getMemId() {
+		return memId;
+	}
+	public void setMemId(String memId) {
+		this.memId = memId;
+	}
+	public String getMemPass() {
+		return memPass;
+	}
+	public void setMemPass(String memPass) {
+		this.memPass = memPass;
+	}
+	public String getMemName() {
+		return memName;
+	}
+	public void setMemName(String memName) {
+		this.memName = memName;
+	}
+	public String getMemBir() {
+		return memBir;
+	}
+	public void setMemBir(String memBir) {
+		this.memBir = memBir;
+	}
+	public String getMemPhone() {
+		return memPhone;
+	}
+	public void setMemPhone(String memPhone) {
+		this.memPhone = memPhone;
+	}
+	public String getMemMail() {
+		return memMail;
+	}
+	public void setMemMail(String memMail) {
+		this.memMail = memMail;
+	}
+	public String getMemAdd1() {
+		return memAdd1;
+	}
+	public void setMemAdd1(String memAdd1) {
+		this.memAdd1 = memAdd1;
+	}
+	public String getMemAdd2() {
+		return memAdd2;
+	}
+	public void setMemAdd2(String memAdd2) {
+		this.memAdd2 = memAdd2;
+	}
+	public String getMemCareer() {
+		return memCareer;
+	}
+	public void setMemCareer(String memCareer) {
+		this.memCareer = memCareer;
+	}
+	public String getMemPosit() {
+		return memPosit;
+	}
+	public void setMemPosit(String memPosit) {
+		this.memPosit = memPosit;
+	}
+	public String getMemCond() {
+		return memCond;
+	}
+	public void setMemCond(String memCond) {
+		this.memCond = memCond;
+	}
+}

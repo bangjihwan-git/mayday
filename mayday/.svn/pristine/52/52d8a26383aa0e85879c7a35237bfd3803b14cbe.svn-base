@@ -1,0 +1,29 @@
+package com.mayday.client.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.client.service.IClientService;
+import com.mayday.client.vo.ClientVO;
+
+@Controller
+public class ClientController {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	@Inject
+	private IClientService clientService;
+	
+	@RequestMapping(value = "/mayday/list")
+	public String list(Model model) {
+		List<ClientVO> clientList = clientService.getClientList();
+		System.out.println(clientList);
+		model.addAttribute("clientList", clientList);
+		return "mayday/list";		
+	}
+}

@@ -1,0 +1,12 @@
+package com.mayday.client.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.mayday.client.vo.ClientVO;
+
+@Mapper
+public interface IClientDao {
+	public List<ClientVO> getClientList();
+}

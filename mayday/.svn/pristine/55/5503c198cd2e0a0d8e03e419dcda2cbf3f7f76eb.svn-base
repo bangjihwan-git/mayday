@@ -1,0 +1,63 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.board.vo.BoardFreeVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.exception.BizPasswordNotMatchedException;
+
+@Service
+public class BoardFreeServiceImpl implements IBoardFreeService{
+
+	@Inject
+	IBoardFreeDao BoardFreeDao;
+
+	@Override
+	public BoardFreeVO getBoard(int boNo) throws BizNotFoundException {
+		BoardFreeVO free = BoardFreeDao.getBoard(boNo);
+		if (free == null)
+			throw new BizNotFoundException();
+		return free;
+	}
+
+	@Override
+	public List<BoardFreeVO> getBoardList() {
+		// TODO Auto-generated method stub
+		return BoardFreeDao.getBoardList();
+	}
+
+	@Override
+	public void increaseHit(int boNo) throws BizNotEffectedException {
+		int cnt = BoardFreeDao.increaseHit(boNo);
+		if (cnt < 1)
+			throw new BizNotEffectedException();
+	}
+
+	@Override
+	public void remove(BoardFreeVO free)
+			throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void regist(BoardFreeVO free) throws BizNotEffectedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void modify(BoardFreeVO free)
+			throws BizNotFoundException, BizPasswordNotMatchedException, BizNotEffectedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
+}

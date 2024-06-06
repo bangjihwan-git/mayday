@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mayday.board.service.IBoardFreeDao">
+<select id="getBoard" parameterType="int" resultType="com.mayday.board.vo.BoardFreeVO">
+
+</select>
+<select id="getBoardList" resultType="com.mayday.board.vo.BoardFreeVO">
+SELECT bo_no
+       , bo_cd
+       , mem_id
+       , bo_title
+       , bo_content
+       , bo_reg_date
+       , bo_mod_date
+       , bo_hit
+FROM board a, code_board b
+WHERE a.bo_cd = b.code_cd
+and bo_cd= 'BOD20'
+ORDER BY bo_no
+</select>
+<update id="increaseHit" parameterType="int"></update>
+<update id="updateBoard" parameterType="com.mayday.board.vo.BoardFreeVO"></update>
+<update id="deleteBoard" parameterType="com.mayday.board.vo.BoardFreeVO"></update>
+<update id="insertBoard" parameterType="com.mayday.board.vo.BoardFreeVO"></update>
+
+
+
+</mapper>

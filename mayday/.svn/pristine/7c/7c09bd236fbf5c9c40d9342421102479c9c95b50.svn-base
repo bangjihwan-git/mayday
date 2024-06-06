@@ -1,0 +1,44 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+
+<table>
+<tr><th>번호</th><th>법령명</th><th>공포일자</th><th>법령종류</th><th>공포번호</th><th>시행일자</th><th>재정.개정구분</th><th>소관부처</th></tr>
+<c:forEach items="${lawList }" var="law">
+	<tr>
+	<td id="boNo">${law.boNo}</td>
+	<td><a href="${law.lawLink}" target="_blank">${law.lawName}</a></td>
+	<td>${law.lawDate}</td>
+	<td>${law.lawCate}</td>
+	<td>${law.lawNo}</td>
+	<td>${law.lawStartDate}</td>
+	<td>${law.lawClass}</td>
+	<td>${law.lawDep}</td>
+	<td><button class="del">삭제하기</button></td>
+	</tr>
+	</c:forEach>
+</table>
+<form:form action="lawFormRemove" method="post" modelAttribute="law" id="Removesubmit">
+<input type="text" value="" name="boNo" id="boNosub" hidden="true">
+</form:form>
+</body>
+<script type="text/javascript">
+$('.del').click(function(){
+	var check =confirm("삭제하시겠습니까?");
+	if (check==true) {
+	var $tr = $(this).closest('tr');
+	var boNo =$tr.find('#boNo').html();
+	$('#boNosub').val(boNo);
+	$('#Removesubmit').submit();
+	}
+})
+</script>
+</html>

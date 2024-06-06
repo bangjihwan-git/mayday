@@ -1,0 +1,45 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+<button><a href="newsForm">기사쓰기</a></button>
+<table border="1">
+<tr>
+	<th>순서</th><th>구분</th><th>기사제목</th><th>언론사</th><th>날짜</th>
+</tr>
+
+	<c:forEach items="${newsList }" var="news">
+	<tr>
+	<td id="boNo">${news.newsNo}</td>
+	<td>${news.boCdName}</td>
+	<td><a href="${news.newsLink}" target="_blank">${news.newsTitle}</a></td>
+	<td>${news.newsPress}</td>
+	<td>${news.newsRegDate}</td>
+	<td><button class="del">삭제하기</button></td>
+	</tr>
+	</c:forEach>
+
+</table>
+<form:form action="newsRemove" method="post" modelAttribute="member" id="Removesubmit">
+<input type="text" value="" name="boNo" id="boNosub" hidden="true">
+</form:form>
+</body>
+<script type="text/javascript">
+$('.del').click(function(){
+	var check =confirm("삭제하시겠습니까?");
+	if (check==true) {
+	var $tr = $(this).closest('tr');
+	var boNo =$tr.find('#boNo').html();
+	$('#boNosub').val(boNo);
+	$('#Removesubmit').submit();
+	}
+})
+</script>
+</html>

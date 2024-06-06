@@ -1,0 +1,6 @@
+package com.mayday.faq.vo;
+
+import com.mayday.common.vo.PagingVO;
+
+public class FaqSearchVO extends PagingVO{
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mayday.law.service.ILawDao">
+<select id="getLawList" resultType="com.mayday.law.service.LawVO">
+SELECT bo_no
+       , law_name
+       , law_date
+       , law_cate
+       , law_no
+       , law_start_date
+       , law_class
+       , law_dep
+       , law_link
+FROM law
+</select>
+<update id="insertLaw" parameterType="com.mayday.law.service.LawVO">
+INSERT INTO law (
+    bo_no
+    , law_name
+    , law_date
+    , law_cate
+    , law_no
+    , law_start_date
+    , law_class
+    , law_dep
+    , law_link
+) VALUES (
+    #{boNo}
+    , #{lawName}
+    , #{lawDate}
+    , #{lawCate}
+    , #{lawNo}
+    , #{lawStartDate}
+    , #{lawClass}
+    , #{lawDep}
+    , #{lawLink}
+)
+</update>
+<update id="deleteLaw" parameterType="com.mayday.law.service.LawVO">
+delete from law
+where bo_no = #{boNo]
+</update>
+</mapper>

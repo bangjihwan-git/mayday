@@ -1,0 +1,9 @@
+package com.mayday.news.service;
+
+import java.util.List;
+
+public interface INewsService {
+public List<NewsVO> getNewsList(NewsSearchVO searchVO);
+public void createNews(NewsVO news);
+public void removeNews(NewsVO news);
+}

@@ -1,0 +1,55 @@
+package com.mayday.payment.web;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class kakao {
+
+	@RequestMapping("kakao")
+	public String kakao() {
+		try {
+			URL url = new URL("https://kapi.kakao.com/v1/payment/ready");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", "KakaoAK ce20c95432c7f41d7e76e28e9e729e87");
+			conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+			conn.setDoOutput(true);
+			String params = "cid=TC0ONETIME&partner_order_id=MAYDAY&partner_user_id=partner_user_id&item_name=engitem&quantity=1&total_amount=50000&tax_free_amount=0&approval_url=http://localhost:7001/successpayment&fail_url=http://localhost:7001/failpayment&cancel_url=http://localhost:7001/cancelpayment";
+			OutputStream out = conn.getOutputStream();
+			DataOutputStream dout = new DataOutputStream(out);
+			dout.writeBytes(params);
+			dout.close();
+
+			int result = conn.getResponseCode();
+
+			InputStream in;
+			if (result == 200) {
+				in = conn.getInputStream();
+			} else {
+				in = conn.getErrorStream();
+			}
+			InputStreamReader isr = new InputStreamReader(in);
+			BufferedReader bfr = new BufferedReader(isr);
+			return bfr.readLine();
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return "{\"result\":\"NO\"}";
+	}
+
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mayday.news.service.INewsDao">
+<select id="getNewsList" resultType="com.mayday.news.service.NewsVO">
+select a.* , rownum as newsNo from
+(
+SELECT
+    bo_no
+       , b.code_name as bo_cd_name
+       , news_title
+       , news_press
+       , to_char(news_reg_date,'YYYY-MM-DD') as news_reg_date 
+       , news_link
+FROM news a , code_board b
+where a.bo_cd = b.code_cd
+order by news_reg_date desc)a
+</select>
+<update id="insertNews" parameterType="com.mayday.news.service.NewsVO">
+INSERT INTO news (
+    bo_no
+    , bo_cd
+    , news_title
+    , news_press
+    , news_reg_date
+    , news_link
+) VALUES (
+    NEWS_SEQ.nextval
+    , #{boCd}
+    , #{newsTitle}
+    , #{newsPress}
+    , to_char(sysdate,'YYYY-MM-DD')
+    , #{newsLink}
+)
+</update>
+
+<update id="deleteNews" parameterType="com.mayday.news.service.NewsVO">
+DELETE FROM news
+WHERE bo_no = #{boNo}
+
+</update>
+</mapper>

@@ -1,0 +1,103 @@
+package com.mayday.common.web;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mayday.common.service.IChatService;
+import com.mayday.common.vo.ChatMessageVO;
+import com.mayday.common.vo.ChatRoomVO;
+import com.mayday.exception.BizNotEffectedException;
+
+@Controller
+public class ChatHandler extends TextWebSocketHandler implements InitializingBean {
+	@Inject
+	private IChatService chatService;
+	
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	
+	// 채팅방 목록 
+	private Map<String, ArrayList<WebSocketSession>> RoomList = new ConcurrentHashMap<String, ArrayList<WebSocketSession>>();
+	// session, 방 번호 
+	private Map<WebSocketSession, String> sessionList = new ConcurrentHashMap<WebSocketSession, String>();
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	private static int i;
+	
+	@Override
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws IOException{
+		String msg = message.getPayload();
+		logger.info("{}:메세지 전송 msg={}",session.getId(),msg);
+		// 메시지 받음
+		ChatMessageVO chatMessage = objectMapper.readValue(msg, ChatMessageVO.class);
+		// 받은 메세지에 담긴 roomId로 해당 채팅방 가져오기 
+		ChatRoomVO chatRoom = chatService.getChatRoomById(chatMessage.getRoomId());
+		if(RoomList.get(chatRoom.getRoomId()) == null) {
+			
+			ArrayList<WebSocketSession> chatSession = new ArrayList<WebSocketSession>();
+			chatSession.add(session);
+			sessionList.put(session, chatRoom.getRoomId());
+			RoomList.put(chatRoom.getRoomId(), chatSession);
+			logger.info("채팅방 생성");
+		}else if(RoomList.get(chatRoom.getRoomId()) != null && chatMessage.getMessage().equals("ENTER-CHAT") && chatRoom != null) {
+			RoomList.get(chatRoom.getRoomId()).add(session);
+			sessionList.put(session, chatRoom.getRoomId());
+			logger.info("채팅방 입장");
+		}else if(RoomList.get(chatRoom.getRoomId())!=null && !chatMessage.getMessage().equals("ENTER-CHAT") && chatRoom != null) {
+			TextMessage textMessage = new TextMessage(chatMessage.getMemName()+","+chatMessage.getMemId()+","+chatMessage.getMessage());
+			int sessionCount = 0;
+			
+			for(WebSocketSession sess: RoomList.get(chatRoom.getRoomId())) {
+				sess.sendMessage(textMessage);
+				sessionCount++;
+			}
+			//sessionCount == 2 -> ucReadCount=0  , sessionCount == 1 -> ucReadCount= 1
+			
+			//DB 저장
+			try {
+				chatService.insertChatMessage(chatMessage);
+				logger.info("메세지 전송 및 DB 저장 성공");
+			} catch (BizNotEffectedException e) {
+				logger.info("메세지 전송 및 DB 저장 실패 e={}",e);
+			}
+		}
+	}
+	
+	// client 접속 시 호출
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		i++;
+		logger.info(session.getId()+"클라이언트 접속 총 접속 인원 : "+i);
+	}
+	
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		i--;
+		logger.info(session.getId()+"클라이언트 접속 해제 총 접속 인원 : " + i);
+		if(sessionList.get(session) != null) {
+			// sessionList에 session이 있다면 해당 방 번호를 가져와서, 방찾고  그방 sessionList에서 제거 
+			RoomList.get(sessionList.get(session)).remove(session);
+			sessionList.remove(session);
+		}
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+}

@@ -1,0 +1,128 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+<form action="lawList" name="search" method="post">
+<input type="hidden" name="curPage" value="${searchVO.curPage }">
+<input type="hidden" name="rowSizePerPage" value="${searchVO.rowSizePerPage }">
+<label>구분</label>
+<select id="searchCate" name="searchCate">
+<option value="">--법령종류--</option>
+<option value="법률" ${searchVO.searchCate eq "법률" ? "selected='selected'":"" }>법률</option>
+<option value="대통령령" ${searchVO.searchCate eq "대통령령" ? "selected='selected'":"" }>대통령령</option>
+<option value="고용노동부령" ${searchVO.searchCate eq "고용노동부령" ? "selected='selected'":"" }>고용노동부령</option>
+</select>
+
+<select id="searchClass" name="searchClass">
+<option value="">--재정.개정구분--</option>
+<option value="일부개정" ${searchVO.searchClass eq "일부개정" ? "selected='selected'":"" }>일부개정</option>
+<option value="타법개정" ${searchVO.searchClass eq "타법개정" ? "selected='selected'":"" }>타법개정</option>
+<option value="제정" ${searchVO.searchClass eq "제정" ? "selected='selected'":"" }>제정</option>
+<option value="전부개정" ${searchVO.searchClass eq "전부개정" ? "selected='selected'":"" }>전부개정</option>
+</select>
+<div>
+<select id="searchCateType" name="searchCateType">
+<option value="">--선택--</option>
+<option value="NM" ${searchVO.searchCateType eq "NM" ? "selected='selected'":"" }>법령명</option>
+<option value="NO" ${searchVO.searchCateType eq "NO" ? "selected='selected'":"" }>공포번호</option>
+<option value="DEP" ${searchVO.searchCateType eq "DEP" ? "selected='selected'":"" }>소관부처</option>
+</select>
+<input type="text" name="searchWord" value="${searchVO.searchWord }" placeholder="검색어를 입력하세요"  >
+<div>
+<select id="searchDateType" name="searchDateType">
+<option value="">--전체--</option>
+<option value="공포" ${searchVO.searchDateType eq "공포" ? "selected='selected'":"" }>공포일자</option>
+<option value="시행" ${searchVO.searchDateType eq "시행" ? "selected='selected'":"" }>시행일자</option>
+</select>
+<input type="date" name="searchDateStart" value="${searchVO.searchDateStart}">
+<input type="date" name="searchDateEnd" value="${searchVO.searchDateEnd}">
+</div>
+<input type="radio" name="searchDateOr" value="공포" ${searchVO.searchDateOr eq "공포" ? "checked":""}>공포일자최신순
+<input type="radio" name="searchDateOr" value="시행" ${searchVO.searchDateOr eq "시행" ? "checked":""}>시행일최신순
+
+<button type="submit">검색</button>
+<button type="submit" id="id_btn_reset">초기화</button>
+</div>
+</form>
+<div>
+		전체 ${searchVO.totalRowCount }건 조회 
+		${searchVO.firstRow }
+		<select id="id_rowSizePerPage"	name="rowSizePerPage">
+			<c:forEach var="i" begin="10" end="50" step="10">
+				<option value="${i}"
+					${i eq searchVO.rowSizePerPage? "selected='selected'":"" }>${i }</option>
+			</c:forEach>
+		</select>
+	</div>
+<table border="1">
+<tr><th>번호</th><th>법령명</th><th>공포일자</th><th>법령종류</th><th>공포번호</th><th>시행일자</th><th>재정.개정구분</th><th>소관부처</th></tr>
+<c:forEach items="${lawList }" var="law">
+	<tr>
+	<td id="boNo">${law.boNo}</td>
+	<td><a href="${law.lawLink}" target="_blank">${law.lawName}</a></td>
+	<td>${law.lawDate}</td>
+	<td>${law.lawCate}</td>
+	<td>${law.lawNo}</td>
+	<td>${law.lawStartDate}</td>
+	<td>${law.lawClass}</td>
+	<td>${law.lawDep}</td>
+	<td><button class="del">삭제하기</button></td>
+	</tr>
+	</c:forEach>
+</table>
+
+<may:paging linkPage="/law/lawList" searchVO="${searchVO }"/>
+
+<form:form action="lawFormRemove" method="post" modelAttribute="law" id="Removesubmit">
+<input type="text" value="" name="boNo" id="boNosub" hidden="true">
+</form:form>
+</body>
+<script type="text/javascript">
+$('.del').click(function(){
+	var check =confirm("삭제하시겠습니까?");
+	if (check==true) {
+	var $tr = $(this).closest('tr');
+	var boNo =$tr.find('#boNo').html();
+	$('#boNosub').val(boNo);
+	$('#Removesubmit').submit();
+	}
+})
+var f = document.forms['search'];
+$('ul.pagination li a[data-page]').click(function (e) {
+	e.preventDefault();	// 기본 디폴트 막기 
+	f.curPage.value=$(this).data('page');
+	f.submit();
+});
+$('#id_btn_reset').click(function() {
+	f.searchDateStart.value = "";
+	f.searchDateEnd.value = "";
+	f.searchWord.value = "";
+	f.searchCateType.options[0].selected = true;
+	f.searchClass.options[0].selected = true;
+	f.searchCate.options[0].selected = true;
+	f.searchDateType.options[0].selected = true;
+	$("input:radio").prop("checked",false);
+	
+	
+});
+$(f).submit(function (e) {
+	e.preventDefault();
+	f.curPage.value =1;
+	f.submit();
+});
+
+$('#id_rowSizePerPage').change(function (e) {
+	f.curPage.value = 1;
+	f.rowSizePerPage.value = this.value;
+	f.submit();
+});
+
+</script>
+</html>

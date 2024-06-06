@@ -1,0 +1,10 @@
+package com.mayday.login.dao;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.mayday.login.vo.UserVO;
+
+@Mapper
+public interface ILoginDao {
+	public UserVO recentLogin(UserVO user);
+}

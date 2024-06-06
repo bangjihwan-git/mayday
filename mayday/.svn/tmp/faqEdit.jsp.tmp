@@ -1,0 +1,77 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp"%>
+<title>FAQ</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+	<div>
+		<c:if test="${e ne null }">
+			<div>해당 글이 존재하지 않거나, 조회수 증가 실패.</div>
+		</c:if>
+		<c:if test="${e eq null }">
+			<form:form action="/faq/faqModify" method="post" modelAttribute="faq">
+				<table border="1">
+					<thead>
+						<tr>
+							<th>글번호</th>
+							<td>${faq.boNo}<form:hidden path="boNo" /></td>
+							<th>구분</th>
+								<td>
+							<c:if test="${faq.codeParentCd eq'FAQ10 ' }">
+							<%-- <section name="">
+								<option value="">-- 직업 선택 --</option>
+									<c:forEach items="${jobList }" var="job">
+									<option value="${job.commCd }"
+										${member.memJob eq job.commCd  ? "selected='selected'":"" }>${job.commNm }</option>
+									</c:forEach>
+							</section> --%>
+								<form:select path="codeName">
+										<form:option value="">--선택하세요--</form:option>
+										<form:options items="${codeList }" itemLabel="codeName"
+											itemValue="codeCd"></form:options>
+										<%-- <form:errors path="codeName" cssStyle="color:red; font-size:smaller" /> --%>
+									</form:select>
+									</c:if> 
+									<c:if test="${faq.codeParentCd ne'FAQ10 ' }">
+									 ${faq.codeName }<form:hidden path="codeName"/>
+									</c:if>
+									</td>
+								<th>아이디</th>
+								<td>${faq.memName }</td>
+								<th>조회수</th>
+								<td>${faq.boHit}</td>
+						</tr>
+						<tr>
+							<th colspan="2">제목</th>
+							<td colspan="6">${faq.boTitle }</td>
+						</tr>
+						<tr>
+							<th colspan="2">질문</th>
+							<td colspan="6"><textarea rows="5" cols="100%" name="boQue">${faq.boQue }</textarea></td>
+						</tr>
+						<tr>
+							<th colspan="2">답변</th>
+							<td colspan="6"><textarea rows="20" cols="100%"
+									name="boContent">${faq.boContent }</textarea></td>
+						</tr>
+					</thead>
+				</table>
+				<div>
+					<a
+						href="/faq/${faq.codeParentCd eq 'FAQ10 ' ? 'precedents':
+									   faq.codeParentCd eq 'FAQ20 ' ? 'counsel':
+					  										'question'}/faqList">&nbsp;&nbsp;목록</a>
+					<a href="/faq/faqView?boNo=${faq.boNo}">&nbsp;&nbsp;해당 뷰</a>
+					<button type="submit" ><span aria-hidden="false">&nbsp;&nbsp;저장</span></button>
+					<!-- <button type="submit" formaction="/faq/faqDelete"><span aria-hidden="false">&nbsp;&nbsp;삭제</span></button> -->
+				</div>
+			</form:form>
+		</c:if>
+	</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp"%>
+<title>petition</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+	<div>
+		<c:if test="${e ne null }">
+			<div>해당 글이 존재하지 않거나, 조회수 증가 실패.</div>
+		</c:if>
+		<c:if test="${e eq null }">
+			<form:form action="/petition/petitionModify" method="post" modelAttribute="petition">
+				<table border="1">
+					<thead>
+					<form:hidden path="boNo"/>
+						<tr>
+							<th colspan="4">
+							<form:select path="petProgress">
+							<form:option value="청원진행중">청원진행중</form:option>
+							<form:option value="청원진행중">청원마감</form:option>
+							<form:option value="답변완료">답변완료</form:option>
+							</form:select></th>
+						</tr>
+						<tr>
+							<th colspan="4">${petition.petTitle }</th>
+						</tr>
+						<tr>
+							<th>청원 시작</th>
+							<td>${petition.petStartDate}</td>
+							<th>청원 마감</th>
+							<td>${petition.petEndDate}</td>
+						</tr>
+						<tr>
+							<td colspan="4"><textarea rows="20" cols="100%"
+									name="boContent">${petition.petContent }</textarea></td>
+						</tr>
+					</thead>
+				</table>
+				<div>
+					<a href="/petition/petitionList">&nbsp;&nbsp;목록</a> 
+					<a href="/petition/petitionView?boNo=${petition.boNo}">&nbsp;&nbsp;해당 뷰</a>
+					<button type="submit">
+						<span aria-hidden="true">&nbsp;&nbsp;저장</span>
+					</button>
+					<button type="submit" formaction="/petition/petitionDelete">
+						<span aria-hidden="true">&nbsp;&nbsp;삭제</span>
+					</button>
+				</div>
+			</form:form>
+		</c:if>
+	</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+package com.mayday.payment.web;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mayday.member.vo.MemberVO;
+import com.mayday.payment.dao.IPaymentDao;
+import com.mayday.payment.vo.PaymentVO;
+
+@Controller
+public class PaymentController {
+
+	IPaymentDao paymentDao;
+
+	@RequestMapping("/kakaoPay")
+	public String kakao(@ModelAttribute("pay") MemberVO pay) {
+		System.out.println(pay);
+		return "payment/kakaoPay";
+	}
+
+	@RequestMapping("/successpayment")
+	public String successPayment(@RequestParam("pg_token")String pg_token, PaymentVO payment) {
+		System.out.println(pg_token);
+//		paymentDao.insertPayment(payment);                            
+		return "payment/successpayment";
+	}
+
+	@RequestMapping("/cancelpayment")
+	public String cancelPayment() {
+		return "payment/cancelpayment";
+	}
+
+	@RequestMapping("/failpayment")
+	public String failPayment() {
+		return "payment/failpayment";
+	}
+
+}

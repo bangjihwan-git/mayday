@@ -1,0 +1,121 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp"%>
+<title>Insert title here</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+	<div>
+		<div>
+			<form name="search" action="/petition/${parentCd }/petitionList" method="post">
+				<input type="hidden" name="curPage" value="${searchVO.curPage }">
+				<input type="hidden" name="rowSizePerPage"
+					value="${searchVO.rowSizePerPage }">
+				<div>
+					<label id="id_searchType">검색</label>
+					<div>
+						<select id="id_searchType" name="searchType">
+							<option value="T"
+								${searchVO.searchType eq 'T' ? "selected='selected'":"" }>제목</option>
+							<option value="C"
+								${searchVO.searchType eq 'C' ? "selected='selected'":"" }>내용</option>
+						</select>
+					</div>
+					<div>
+						<i class="fas fa-search"></i> <input type="text" name="searchWord"
+							value="${searchVO.searchWord }" placeholder="검색어를 입력하세요">
+					</div>
+					<div>
+						<input type="radio" value="S" name="searchOrder" /> <i
+							class="fas fa-sort-up"></i>최신순 
+							<input type="radio" value="E" name="searchOrder" /> <i
+							class="fas fa-sort-up"></i>오래된순 
+							<input type="radio" value="B"
+							name="searchOrder" /> <i class="fas fa-sort-up"></i>글 번호순
+					</div>
+					<div>
+						<button type="submit">
+							<i class="fas fa-search"></i> &nbsp;&nbsp;검 색
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div>
+		<a href="/petition/petitionForm"><span aria-hidden="true"></span> &nbsp;새글쓰기</a>
+	</div>
+	<div>
+		전체 ${searchVO.totalRowCount }건 조회 ${searchVO.firstRow } <select
+			id="id_rowSizePerPage" name="rowSizePerPage">
+			<c:forEach var="i" begin="10" end="50" step="10">
+				<option value="${i}"
+					${i eq searchVO.rowSizePerPage? "selected='selected'":"" }>${i }</option>
+			</c:forEach>
+		</select>
+	</div>
+	<div>
+		<h3> 국민 청원 </h3>
+	</div>
+	<div>
+		<table border="1">
+			<thead>
+				<tr>
+					<th>글번호</th>
+					<th>제목</th>
+					<th>시작일</th>
+					<th>마감일</th>
+					<th>진행사항</th>
+				</tr>
+				<c:forEach items="${petitionList}" var="petition">
+					<tr>
+						<td>${petition.rowNo}</td>
+						<td><a href="/petition/petitionView?boNo=${petition.boNo }">
+								${petition.petTitle}</a></td>
+						<td>${petition.petStartDate}</td>
+						<td>${petition.petEndDate}</td>
+						<td>${petition.petProgress}</td>
+					</tr>
+				</c:forEach>
+			</thead>
+		</table>
+		<may:paging linkPage="/petition/petitionList"
+			searchVO="${searchVO }" />
+
+	</div>
+</body>
+<script type="text/javascript">
+	var f = document.forms['search'];
+	console.log(f);
+	// paging ul class = pagination 각 페이징 번호 클릭
+	$('ul.pagination li a[data-page]').click(function(e) {
+		e.preventDefault(); // 기본 디폴트 막기 
+		f.curPage.value = $(this).data('page');
+		f.submit();
+	});
+	// 검색버튼 클릭시 
+	$(f).submit(function(e) {
+		e.preventDefault();
+		f.curPage.value = 1;
+		f.submit();
+	});
+
+	// 최신순, 조회순 오더바이
+	$('input[type=radio]').click(function(e) {
+		f.curPage.value = 1;
+		f.searchOrder.value = this.value;
+		f.submit();
+	});
+
+	// 페이징 목록 갯수 변경시 
+	$('#id_rowSizePerPage').change(function(e) {
+		f.curPage.value = 1;
+		f.rowSizePerPage.value = this.value;
+		f.submit();
+	});
+</script>
+</html>

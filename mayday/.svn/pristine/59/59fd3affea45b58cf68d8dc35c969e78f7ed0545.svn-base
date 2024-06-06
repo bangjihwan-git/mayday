@@ -1,0 +1,29 @@
+package com.mayday.board.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.board.service.IBoardFreeService;
+import com.mayday.board.vo.BoardFreeVO;
+
+@Controller
+public class BoardFreeController {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Inject
+	IBoardFreeService BoardFreeService;
+	
+	@RequestMapping(value = "/mayday/board/freeList")
+	public String freeList(Model model) {
+		List<BoardFreeVO> BFList = BoardFreeService.getBoardList();
+		model.addAttribute("BFList",BFList);
+		return "mayday/board/freeList";
+	}
+}

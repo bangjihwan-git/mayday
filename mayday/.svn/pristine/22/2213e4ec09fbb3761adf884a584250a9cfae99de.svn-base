@@ -1,0 +1,68 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp"%>
+<title>petition</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+	<div>
+		<c:if test="${e ne null }">
+			<div>해당 글이 존재하지 않거나, 조회수 증가 실패.</div>
+		</c:if>
+		<c:if test="${e eq null }">
+			<form:form action="/petition/petitionModify" method="post" modelAttribute="petition">
+				<table border="1">
+					<thead>
+						<tr>
+							<th>글번호</th>
+							<td>${petition.boNo}<form:hidden path="boNo" /></td>
+							<th>구분</th>
+								<td>
+							<c:if test="${petition.codeParentCd eq'petition10 ' }">
+								<form:select path="codeName">
+										<form:option value="">--선택하세요--</form:option>
+										<form:options items="${codeList }" itemLabel="codeName"
+											itemValue="codeCd" ></form:options>
+										<%-- <form:errors path="codeName" cssStyle="color:red; font-size:smaller" /> --%>
+									</form:select>
+									</c:if> 
+									<c:if test="${petition.codeParentCd ne'petition10 ' }">
+									 ${petition.codeName }<form:hidden path="codeName"/>
+									</c:if>
+									</td>
+								<th>아이디</th>
+								<td>${petition.memName }</td>
+								<th>조회수</th>
+								<td>${petition.boHit}</td>
+						</tr>
+						<tr>
+							<th colspan="2">제목</th>
+							<td colspan="6">${petition.boTitle }</td>
+						</tr>
+						<tr>
+							<th colspan="2">질문</th>
+							<td colspan="6"><textarea rows="5" cols="100%" name="boQue">${petition.boQue }</textarea></td>
+						</tr>
+						<tr>
+							<th colspan="2">답변</th>
+							<td colspan="6"><textarea rows="20" cols="100%"
+									name="boContent">${petition.boContent }</textarea></td>
+						</tr>
+					</thead>
+				</table>
+				<div>
+					<a
+						href="/petition/petitionList">&nbsp;&nbsp;목록</a>
+					<a href="/petition/petitionView?boNo=${petition.boNo}">&nbsp;&nbsp;해당 뷰</a>
+					<button type="submit" ><span aria-hidden="true">&nbsp;&nbsp;저장</span></button>
+					<button type="submit" formaction="/petition/petitionDelete"><span aria-hidden="true">&nbsp;&nbsp;삭제</span></button>
+				</div>
+			</form:form>
+		</c:if>
+	</div>
+</body>
+</html>

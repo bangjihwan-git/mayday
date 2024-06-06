@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<html>
+<head>
+<%@include file="/WEB-INF/inc/header.jsp" %>
+<title>Insert title here</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+<header class="bg-yellow py-5">
+     <div class="container px-5">
+         <div class="row gx-5 align-items-center justify-content-center">
+             <div class="col-lg-8 col-xl-7 col-xxl-6">
+                 <div class="my-5 text-center text-xl-start">
+                     <h1 class="display-5 fw-bolder text-black mb-2">MAYDAY</h1>
+                     <p class="lead fw-normal text-black-50 mb-4"> MAY DAY! MAYDAY! 
+									앞은 노동절, 뒤는 구조신호를 의미합니다. '나를 도우러 와달라'라는 프랑스어에서 따온 말이죠. 
+									많은 근로자들이 정당한 대우를 받지 못한채 회사의 대형로펌, 법을 몰라서 등의 이유로 그저 참고 또 일합니다. 
+									이젠 '나를 도우러 와달라!!' 구조 요청을 외치는 당신을 위해 함께 MAY DAY!</p>
+                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                         <a class="btn btn-outline-info btn-lg px-4 me-sm-3" href="">Get Started</a>
+                         <a class="btn btn-outline-warning btn-lg px-4" href="">Learn More</a>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." /></div>
+         </div>
+     </div>
+ </header>
+</body>
+</html>

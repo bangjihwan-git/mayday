@@ -1,0 +1,48 @@
+package com.mayday.board.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mayday.board.service.IBoardFreeService;
+import com.mayday.board.vo.BoardFreeVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+
+@Controller
+public class BoardFreeController {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@Inject
+	IBoardFreeService BoardFreeService;
+	
+	@RequestMapping(value = "/mayday/board/freeList")
+	public String freeList(Model model) {
+		System.out.println("------------------------------------------------");
+		logger.debug("freeList");
+		List<BoardFreeVO> BFList = BoardFreeService.getBoardList();
+		model.addAttribute("BFList",BFList);
+		return "board/freeList";
+	}
+	
+	@RequestMapping(value = "/mayday/board/freeView")
+	public String freeView(@RequestParam(value="boNo",required = true)int boNo, Model model) {
+		logger.debug("freeView");
+		try {
+			BoardFreeService.increaseHit(boNo);
+			BoardFreeVO free = BoardFreeService.getBoard(boNo);
+			model.addAttribute("free", free);
+		} catch (BizNotFoundException | BizNotEffectedException e) {
+			model.addAttribute("e", e);
+		}
+		return "board/freeView";
+	}
+	
+}

@@ -1,0 +1,76 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%request.setCharacterEncoding("utf-8");%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+<style>
+	.page-header{
+		margin-top: 100px;
+		font-size: 100px;
+	}
+	.row{
+		margin-bottom: 30px;
+	}
+	.aLink{
+		color:black;
+		text-decoration: none;
+	}
+</style>
+</head>
+<body>
+	<div class="page-header">
+		<center>MAYDAY</center>
+	</div>
+	<form:form action="/login/login" method="POST">
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="exampleInputEmail1"> 아이디 </label> 
+					<input type="text" class="form-control" name="userId" value="${cookie.SAVED_ID.value}">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<label for="exampleInputPassword1">비밀번호</label>
+				<input type="password" class="form-control" name="userPass">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-2">
+				<label>
+					<input type="checkbox" name="saveId" value="Y" <c:if test="${cookie.SAVED_ID ne null }">checked="checked"</c:if>>아이디 저장
+				</label>
+			</div>
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-block bg-yellow" style="float:right">로그인</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-2">
+				<a href="/signup/signup1" class = "aLink" >변호사/노무사 회원가입</a>
+			</div>
+			<div class="col-md-2">
+				<a href="/signup/signup1-2" class = "aLink" style="float:right">일반회원 회원가입</a>
+			</div>
+		</div>
+
+	</form:form>
+</body>
+<script type="text/javascript">
+	if(${fe ne null || pe ne null }){
+		alert(" 회원 정보가 없습니다. 아이디나 패스워드를 확인해주세요.");
+	}
+</script>
+</html>

@@ -1,0 +1,151 @@
+package com.mayday.board.web;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mayday.board.service.IBoardService;
+import com.mayday.board.vo.BoardSerchVO;
+import com.mayday.board.vo.BoardVO;
+import com.mayday.code.service.ICodeService;
+import com.mayday.code.vo.CodeVO;
+import com.mayday.common.vo.ResultMessageVO;
+import com.mayday.exception.BizNotEffectedException;
+import com.mayday.exception.BizNotFoundException;
+import com.mayday.faq.vo.FaqVO;
+
+
+@Controller
+@RequestMapping("/board")
+public class BoardController {
+
+	@Inject
+	IBoardService boardservice;
+	@Inject
+	ICodeService codeservice;
+
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	@ModelAttribute("codeList")
+	public List<CodeVO> codeList() {
+		List<CodeVO> codeList = codeservice.getCodeList("BOD10 ");
+		return codeList;
+		
+	}
+	@RequestMapping("/{parentCd}/boardList")
+	public String boardList(@ModelAttribute("searchVO") BoardSerchVO searchvo, Model model,
+			@PathVariable("parentCd") String parentCd) {
+		logger.debug("searchVO={}", searchvo);
+		if (parentCd.equals("notice")) {
+			searchvo.setBoardParentCd("BOD30 ");
+		} else if (parentCd.equals("question")) {
+			searchvo.setBoardParentCd("BOD10 ");
+		} else if (parentCd.equals("free")) {
+			searchvo.setBoardParentCd("BOD20 ");
+		}
+		model.addAttribute("searchVO", searchvo);
+		try {
+			List<BoardVO> boardList = boardservice.getBoardList(searchvo);
+			model.addAttribute("boardList", boardList);
+		} catch (BizNotFoundException e) {
+			model.addAttribute("e", e);
+		}
+		return "board/boardList";
+	}
+
+	@GetMapping("/boardView")
+	public String boardView(@RequestParam(value = "boNo", required = true)int boNo, Model model) {
+		logger.debug("boNo={}", boNo);
+		try {
+			boardservice.increaseboard(boNo);
+			BoardVO board = boardservice.getboard(boNo);
+			model.addAttribute("board", board);
+		} catch (BizNotEffectedException|BizNotFoundException e) {
+			logger.error("error ={}", e);
+			model.addAttribute("e", e);
+		}
+		return "board/boardView";
+	}
+
+	@RequestMapping("/boardForm")
+	public String boardForm(@ModelAttribute("board") BoardVO board) {
+		return "board/boardForm";
+	}
+	
+	@RequestMapping(value="/boardModify", method=RequestMethod.POST)
+	// 검사 받는 객체 = Command 객체(free)
+	// 검사한 결과 = BindingResult는 Command객체 바로 뒤에
+	// 검사 기준은 vo에 작성
+	// 검사 통과 1개 못했을때 해당 필드만 재작성하면 됨
+	public String boardModify(@ModelAttribute("board") BoardVO board, Model model) {
+		logger.debug("boardModify");
+		
+		ResultMessageVO resultMessageVO = new ResultMessageVO();
+		try{
+			boardservice.modifyboard(board);
+			resultMessageVO.setResult(true);
+			resultMessageVO.setMessage("수정 성공");
+			resultMessageVO.setTitle("크리스탈");
+			resultMessageVO.setUrl("/boardView?boNo="+board.getBoNo());
+			resultMessageVO.setUrlTitle("해당뷰");
+		}catch (BizNotFoundException enf){
+			resultMessageVO.setResult(false);
+			resultMessageVO.setMessage("수정 실패 notFound");
+			resultMessageVO.setTitle("크리스탈");
+			resultMessageVO.setUrl("/{parentCd}/boardList");
+			resultMessageVO.setUrlTitle("목록으로");
+		} catch (BizNotEffectedException ene) {
+			resultMessageVO.setResult(false);
+			resultMessageVO.setMessage("수정 실패 notEffect");
+			resultMessageVO.setTitle("크리스탈");
+			resultMessageVO.setUrl("/{parentCd}/boardList");
+			resultMessageVO.setUrlTitle("목록으로");
+		}
+		model.addAttribute("resultMessageVO", resultMessageVO);
+		return "common/message";
+	}
+	
+	@RequestMapping("/boardEdit")
+	public String boardEdit(@ModelAttribute("boNo") int boNo, Model model) {
+		logger.info("boardEdit");
+		BoardVO board;
+		try {
+			board = boardservice.getboard(boNo);
+			model.addAttribute("board", board);
+			return "board/boardEdit";
+		} catch (BizNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+//	@RequestMapping(value="/freeEdit.wow")
+//	public ModelAndView freeEdit(@RequestParam("boNo")int boNo) {
+//		logger.info("{}", boNo);
+//		ModelAndView mav = new ModelAndView();
+//		try {
+//			FreeBoardVO free = freeService.getBoard(boNo);
+//			mav.addObject("free", free);
+//			mav.setViewName("free/freeEdit");
+//		} catch (BizNotFoundException e) {
+//			mav.addObject("e", e);
+//		}		
+//		return mav;
+//	}
+	@RequestMapping("/boardDelete")
+	public String boardDelete() {
+		return "board/boardDelete";
+	}
+
+}

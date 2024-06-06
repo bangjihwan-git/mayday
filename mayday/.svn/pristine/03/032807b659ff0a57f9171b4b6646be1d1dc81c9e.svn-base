@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mayday.common.service.IChatDao">
+	<insert id="add" parameterType="map">
+	INSERT INTO chat (
+			    chat_no
+			    , mem_id
+			    , mem_name
+			    , chat_title
+			    , chat_reg_date
+			    , mem_pass
+			) VALUES (
+				 seq_chat_no.nextval ,#{memId},#{memName},#{chatTitle},sysdate, #{memPass})
+	</insert>
+</mapper>

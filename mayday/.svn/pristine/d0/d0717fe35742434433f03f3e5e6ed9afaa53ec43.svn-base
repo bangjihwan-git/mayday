@@ -1,0 +1,115 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="/WEB-INF/inc/header.jsp"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%@ include file="/WEB-INF/inc/top.jsp"%>
+
+<form action="newsList" name="search" method="post">
+<input type="hidden" name="curPage" value="${searchVO.curPage }">
+<input type="hidden" name="rowSizePerPage" value="${searchVO.rowSizePerPage }">
+<label>구분</label>
+<select id="searchCate" name="searchCate">
+<option value="">--전체--</option>
+<c:forEach items="${codeList}" var="code" varStatus="codeList">
+<c:choose>
+<c:when test="${codeList.first }">
+</c:when>
+<c:otherwise>
+<option value="${code.codeCd}" ${code.codeCd eq searchVO.searchCate ? "selected='selected'":""  }>${code.codeName }</option>
+</c:otherwise>
+</c:choose>
+</c:forEach>
+</select>
+<div>
+<select id="searchCateType" name="searchCateType">
+<option value="">--전체--</option>
+<option value="title" ${searchVO.searchCateType eq "title" ? "selected='selected'":"" }>기사제목</option>
+<option value="press" ${searchVO.searchCateType eq "press" ? "selected='selected'":"" }>언론사</option>
+</select>
+<input type="text" name="searchWord" value="${searchVO.searchWord }" placeholder="검색어를 입력하세요"  >
+<input type="radio" name="searchOrder" value="Y" ${searchVO.searchOrder eq "Y" ? "checked":""}>최신기사
+<button type="submit">검색</button>
+<button type="submit" id="id_btn_reset">초기화</button>
+</div>
+</form>
+<c:if test="${sessionScope.USER_INFO.userId eq 'admin'}">
+<button><a href="newsForm">기사쓰기</a></button>	
+	</c:if>
+
+<div>
+		전체 ${searchVO.totalRowCount }건 조회 
+		${searchVO.firstRow }
+		<select id="id_rowSizePerPage"	name="rowSizePerPage">
+			<c:forEach var="i" begin="10" end="50" step="10">
+				<option value="${i}"
+					${i eq searchVO.rowSizePerPage? "selected='selected'":"" }>${i }</option>
+			</c:forEach>
+		</select>
+	</div>
+<table border="1">
+<tr>
+	<th>순서</th><th>구분</th><th>기사제목</th><th>언론사</th><th>날짜</th>
+</tr>
+
+	<c:forEach items="${newsList }" var="news">
+	<tr>
+	<td id="boNo">${news.rowNo}</td>
+	<td>${news.boCdName}</td>
+	<td><a href="${news.newsLink}" target="_blank">${news.newsTitle}</a></td>
+	<td>${news.newsPress}</td>
+	<td>${news.newsRegDate}</td>
+	<c:if test="${sessionScope.USER_INFO.userId eq 'admin'}">
+	<td><button class="del">삭제하기</button></td>	
+	</c:if>
+	</tr>
+	</c:forEach>
+
+</table>
+<may:paging linkPage="/member/expertList" searchVO="${searchVO }"/>
+<form:form action="newsRemove" method="post" modelAttribute="member" id="Removesubmit">
+<input type="text" value="" name="boNo" id="boNosub" hidden="true">
+</form:form>
+</body>
+<script type="text/javascript">
+$('.del').click(function(){
+	var check =confirm("삭제하시겠습니까?");
+	if (check==true) {
+	var $tr = $(this).closest('tr');
+	var boNo =$tr.find('#boNo').html();
+	$('#boNosub').val(boNo);
+	$('#Removesubmit').submit();
+	}
+})
+
+var f = document.forms['search'];
+$('ul.pagination li a[data-page]').click(function (e) {
+	e.preventDefault();	// 기본 디폴트 막기 
+	f.curPage.value=$(this).data('page');
+	f.submit();
+});
+$('#id_btn_reset').click(function() {
+	f.searchWord.value = "";
+	f.searchCateType.options[0].selected = true;
+	f.searchCate.options[0].selected = true;
+	$("input:radio").prop("checked",false);
+});
+$(f).submit(function (e) {
+	e.preventDefault();
+	f.curPage.value =1;
+	f.submit();
+});
+
+$('#id_rowSizePerPage').change(function (e) {
+	f.curPage.value = 1;
+	f.rowSizePerPage.value = this.value;
+	f.submit();
+});
+
+</script>
+</html>

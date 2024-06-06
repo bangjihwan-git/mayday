@@ -1,0 +1,26 @@
+package com.mayday.law.service;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+@Service
+public class LawServiceImpl implements ILawService{
+	@Inject
+	ILawDao lawDao;
+	@Override
+	public List<LawVO> getLawList(LawSearchVO searchVO) {
+		int totalRowCount = lawDao.getCountLaw(searchVO);
+		searchVO.setTotalRowCount(totalRowCount);
+		searchVO.pageSetting();
+		return lawDao.getLawList(searchVO);
+	}
+	@Override
+	public int removeLaw(LawVO law) {
+		return lawDao.deleteLaw(law);
+	}
+
+
+
+}

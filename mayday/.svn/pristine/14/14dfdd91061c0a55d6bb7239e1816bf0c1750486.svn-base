@@ -1,0 +1,17 @@
+package com.mayday.board.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.mayday.board.vo.BoardFreeVO;
+
+@Mapper
+public interface IBoardFreeDao {
+	public BoardFreeVO getBoard(int boNo);
+	public List<BoardFreeVO> getBoardList();
+	public int increaseHit(int boNo);
+	public int updateBoard(BoardFreeVO free);
+	public int deleteBoard(BoardFreeVO free);
+	public int insertBoard(BoardFreeVO free);
+}

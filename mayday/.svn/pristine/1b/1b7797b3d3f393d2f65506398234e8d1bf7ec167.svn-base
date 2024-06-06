@@ -1,0 +1,37 @@
+package com.mayday.payment.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+@Controller
+public class PaymentController {
+	  
+    
+    @RequestMapping("/kakaoPay")
+    public String kakao() {
+        return "payment/kakaoPay";
+    }
+
+    @RequestMapping("/successpayment")
+    public String successPayment() {
+        return "payment/successpayment";
+    }
+
+    @RequestMapping("/cancelpayment")
+    public String cancelPayment() {
+        return "payment/cancelpayment";
+    }
+
+    @RequestMapping("/failpayment")
+    public String failPayment() {
+        return "payment/failpayment";
+    }
+
+   
+    
+    
+    
+    
+    
+}

@@ -1,0 +1,12 @@
+package com.mayday.news.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface INewsDao {
+public List<NewsVO> getNewsList();
+public int insertNews(NewsVO news);
+public int deleteNews(NewsVO news);
+}

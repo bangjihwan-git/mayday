@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp"%>
+<title>petition</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+	<form:form action="/petition/petitionRegist" method="post"
+		modelAttribute="petition">
+
+		<div>
+			<table border="1">
+					<tr>
+						<th colspan="4"><form:select path="petProgress">
+								<form:option value="청원진행중">청원진행중</form:option>
+								<form:option value="청원진행중">청원마감</form:option>
+								<form:option value="답변완료">답변완료</form:option>
+							</form:select></th>
+					</tr>
+					<tr>
+						<th colspan="1">제목</th>
+						<td colspan="3"><form:input path="petTitle" /></td>
+					</tr>
+					<tr>
+						<th colspan="1">청원링크</th>
+						<td colspan="3"><form:input path="petLink" /></td>
+					</tr>
+					<tr>
+						<th>청원 시작</th>
+						<td><input type="date" name="petStartDate"></td>
+						<th>청원 마감</th>
+						<td><input type="hidden" name="petEndDate" ></td>
+					</tr>
+					<tr>
+						<td colspan="4"><textarea rows="20" cols="100%"
+								name="petContent">${petition.petContent }</textarea></td>
+					</tr>
+			</table>
+			<div>
+				<a href="/petition/petitionList">&nbsp;&nbsp;목록</a>
+				<button type="submit">
+					<span aria-hidden="false">&nbsp;&nbsp;저장</span>
+				</button>
+			</div>
+		</div>
+	</form:form>
+</body>
+<script type="text/javascript">
+var start = $('input[type=date][name=petStartDate]');
+var end = $('input[type=date][name=petEndDate]');
+start.change(function () {
+	end = new Date(start.val());
+	newMonth=end.getMonth()+1;
+	end.setMonth(newMonth);
+	console.log(end);
+});
+</script>
+</html>

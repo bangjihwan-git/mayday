@@ -1,0 +1,5 @@
+package com.mayday.reply.vo;
+
+public interface ReplyVO {
+
+}

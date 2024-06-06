@@ -1,0 +1,13 @@
+package com.mayday.member.service;
+
+import java.util.List;
+
+public interface IMemberService {
+	public List<MemberVO> getMemberList();
+	public MemberVO getMember(String memId);
+	public int Modify(MemberVO member);
+	public List<MemberVO> getExpertList();
+	public MemberVO getExpert(String memId);
+	public void registMember(MemberVO member);
+	public void registLawyer(MemberVO member);
+}

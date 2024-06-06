@@ -1,0 +1,5 @@
+package com.mayday.client.vo;
+
+public class ClientVO {
+	
+}

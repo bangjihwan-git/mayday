@@ -1,0 +1,45 @@
+package com.mayday.login.web;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mayday.login.service.ILoginService;
+
+@Controller
+public class LoginController {
+	
+	@Inject
+	ILoginService loginservice;
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@GetMapping(value = "/mayday/login/login")
+	public String getLogin() {
+		return "/mayday/login/login";
+	}
+	
+	@PostMapping(value = "/mayday/login/login")
+	public String postLogin(HttpServletRequest req, HttpServletResponse resp) {
+		String id = req.getParameter("userId");
+		String pass = req.getParameter("userPass");
+		//String saveId = req.getParameter("saveId");
+		logger.info("id = {}", id);
+		logger.info("pw = {}", pass);
+				
+		return null;
+	}
+	
+	@RequestMapping(value = "/mayday/signup/signup1")
+	public String signup() {
+		return "/mayday/signup/signup1";
+	}
+
+}

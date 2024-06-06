@@ -1,0 +1,38 @@
+package com.mayday.login.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.mayday.login.vo.UserVO;
+import com.mayday.member.service.IMemberDao;
+import com.mayday.member.service.MemberVO;
+
+@Service
+public class LoginServiceImpl implements ILoginService {
+
+	@Inject
+	IMemberDao memberDao;
+
+	@Override
+	public UserVO login(String userId, String userPass) {
+
+		/*
+		 * MemberVO member = memberDao.getMember(userId);
+		 * if(member.getMemPass().equals(userPass)) { UserVO user = new UserVO();
+		 * user.setUserId(userId); user.setUserPass(userPass);
+		 * user.setUserName(member.getMemName());
+		 * user.setUserRole(memberDao.getMemRoleByUserId(member.getMemId()));
+		 * System.out.println(user); return user;
+		 */
+		
+		
+		
+		return null;
+	}
+	
+	
+	
+
+	
+}

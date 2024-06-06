@@ -1,0 +1,46 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@include file="/WEB-INF/inc/header.jsp" %>
+<title>FAQ</title>
+<%@include file="/WEB-INF/inc/top.jsp"%>
+</head>
+<body>
+<div>
+<c:if test="${e ne null }">
+	<div>해당 글이 존재하지 않거나, 조회수 증가 실패. </div>
+</c:if>
+	<c:if test="${e eq null }">
+	<table border="1">
+	<thead>
+		<tr>
+			<th>글번호</th>
+			<td>${faq.boNo}</td>
+			<th>구분</th>
+			<td>${faq.codeName}</td>
+			<th>아이디</th>
+			<td>${faq.memName }</td>
+			<th>조회수</th>
+			<td>${faq.boHit}</td>
+		</tr>
+			<tr>
+				<th colspan="2">제목</th>
+				<td colspan="6">${faq.boTitle }</td>
+			</tr>
+			<tr>
+				<th colspan="2">질문</th>
+				<td colspan="6"><textarea rows="5" cols="100%" name="boQue">${faq.boQue }</textarea></td>
+			</tr>
+			<tr>
+				<th colspan="2">답변</th>
+				<td colspan="6"><textarea rows="20" cols="100%" name="boContent">${faq.boContent }</textarea></td>
+			</tr>
+	</thead>
+	</table>
+	</c:if>
+</div>
+</body>
+</html>

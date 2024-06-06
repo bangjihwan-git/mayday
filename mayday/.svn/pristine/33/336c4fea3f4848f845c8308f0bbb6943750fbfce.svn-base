@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mayday.member.service.IMemberDao">
+<select id="getMemberList" resultType="com.mayday.member.service.MemberVO">
+SELECT mem_id
+       , mem_pass
+       , mem_name
+       , to_char(mem_bir,'YYYY-MM-DD') as mem_bir
+       , mem_phone
+       , mem_mail
+       , mem_add1
+       , mem_add2
+       , mem_career
+       , mem_posit
+       , mem_cond
+FROM member
+</select>
+
+<select id="getMember" parameterType="String" resultType="com.mayday.member.service.MemberVO">
+SELECT mem_id
+       , mem_pass
+       , mem_name
+       , to_char(mem_bir,'YYYY-MM-DD') as mem_bir
+       , mem_phone
+       , mem_mail
+       , mem_add1
+       , mem_add2
+       , mem_career
+       , mem_posit
+       , mem_cond
+FROM member
+where mem_id = #{memId}
+</select>
+
+<update id="updateMember" parameterType="com.mayday.member.service.MemberVO" >
+UPDATE member
+SET
+    mem_posit = #{memPosit}
+    , mem_Cond = #{memCond}
+WHERE mem_id = #{memId}
+      
+</update>
+
+<select id="getExpertList"  resultType="com.mayday.member.service.MemberVO">
+SELECT mem_id
+       , mem_pass
+       , mem_name
+       , mem_bir
+       , mem_phone
+       , mem_mail
+       , mem_add1
+       , mem_add2
+       , mem_career
+       , mem_posit
+       , mem_cond
+       , mem_reg_date
+       , mem_end_date
+FROM member
+where mem_posit = 'EXPERT'
+</select>
+</mapper>
